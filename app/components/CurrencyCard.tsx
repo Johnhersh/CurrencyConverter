@@ -13,7 +13,7 @@ export default function CurrencyCard() {
         />
       </View>
       <View style={styles.valuesContainer}>
-        <Text>Open up App.tsx to start working on your app!</Text>
+        <Text>Currency values should go here</Text>
       </View>
     </View>
   );
