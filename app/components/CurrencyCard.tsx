@@ -31,26 +31,26 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    maxHeight: "5em",
-    marginHorizontal: "1em",
-    marginVertical: "0.5em",
+    maxHeight: 70,
+    marginHorizontal: 2,
+    marginVertical: 1,
     borderRadius: 7,
     borderWidth: 1,
     borderColor: "#adadad",
   },
   currencyContainer: {
     flex: 1,
-    paddingLeft: "1em",
+    paddingLeft: 10,
   },
   imageContainer: {
-    width: "50px",
-    height: "50px",
+    width: 50,
+    height: 50,
     borderRadius: 100,
   },
   valuesContainer: {
     flex: 1,
     alignItems: "flex-end",
-    paddingRight: "1em",
+    paddingRight: 10,
   },
 });
 

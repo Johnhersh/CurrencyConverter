@@ -19,13 +19,13 @@ export default function HomeView() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    display: "flex",
     flexDirection: "column",
     backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center",
   },
   cardsContainer: {
     flex: 1,
-    width: "50%",
+    width: "60%",
   },
 });
