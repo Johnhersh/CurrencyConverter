@@ -1,13 +1,23 @@
 import { StatusBar } from "expo-status-bar";
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 
 import CurrencyCard from "../components/CurrencyCard";
+
+interface StatusBarProps {
+  style: "auto" | "inverted" | "light" | "dark" | undefined;
+}
+
+const MyStatusBar = ({ ...props }: StatusBarProps) => (
+  <View style={styles.statusBar}>
+    <StatusBar translucent={true} hidden={false} {...props} />
+  </View>
+);
 
 export default function HomeView() {
   return (
     <View style={styles.container}>
-      <StatusBar style="auto" />
+      <MyStatusBar style="dark" />
       <View style={styles.cardsContainer}>
         <CurrencyCard currencySymbol="$" value={100} />
         <CurrencyCard currencySymbol="£" value={800} />
@@ -15,6 +25,8 @@ export default function HomeView() {
     </View>
   );
 }
+
+const STATUSBAR_HEIGHT = Platform.OS === "web" ? 0 : 50;
 
 const styles = StyleSheet.create({
   container: {
@@ -27,5 +39,10 @@ const styles = StyleSheet.create({
   cardsContainer: {
     flex: 1,
     width: "60%",
+  },
+  statusBar: {
+    height: STATUSBAR_HEIGHT,
+    width: "100%",
+    backgroundColor: "white",
   },
 });
