@@ -9,8 +9,8 @@ export default function HomeView() {
     <View style={styles.container}>
       <StatusBar style="auto" />
       <View style={styles.cardsContainer}>
-        <CurrencyCard />
-        <CurrencyCard />
+        <CurrencyCard currencySymbol="$" value={100} />
+        <CurrencyCard currencySymbol="£" value={800} />
       </View>
     </View>
   );

@@ -1,7 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
 
-export default function CurrencyCard() {
+interface Props {
+  currencySymbol: string;
+  value: number;
+}
+
+const CurrencyCard: React.FC<Props> = ({ currencySymbol = "$", value = 0 }) => {
   return (
     <View style={styles.container}>
       <View style={styles.currencyContainer}>
@@ -13,11 +18,11 @@ export default function CurrencyCard() {
         />
       </View>
       <View style={styles.valuesContainer}>
-        <Text>Currency values should go here</Text>
+        <Text>{currencySymbol + value}</Text>
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -44,5 +49,9 @@ const styles = StyleSheet.create({
   },
   valuesContainer: {
     flex: 1,
+    alignItems: "flex-end",
+    paddingRight: "1em",
   },
 });
+
+export default CurrencyCard;
