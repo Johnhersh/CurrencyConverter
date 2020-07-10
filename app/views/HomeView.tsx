@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { Platform, StyleSheet, View } from "react-native";
 
+import { getCurrencyFromApi } from "../fetchCurrencies";
 import CurrencyCard from "../components/CurrencyCard";
 
 interface StatusBarProps {
@@ -15,6 +16,11 @@ const MyStatusBar = ({ ...props }: StatusBarProps) => (
 );
 
 export default function HomeView() {
+  getCurrencyFromApi().then((rates) => {
+    console.log("Rates: ");
+    console.log(rates.rates);
+  });
+
   return (
     <View style={styles.container}>
       <MyStatusBar style="dark" />
