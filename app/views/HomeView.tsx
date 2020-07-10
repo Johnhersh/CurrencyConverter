@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Platform, StyleSheet, View } from "react-native";
 
 import { getCurrencyFromApi } from "../fetchCurrencies";
@@ -16,17 +16,22 @@ const MyStatusBar = ({ ...props }: StatusBarProps) => (
 );
 
 export default function HomeView() {
-  getCurrencyFromApi().then((rates) => {
-    console.log("Rates: ");
-    console.log(rates.rates);
-  });
+  // const [newRates, setNewRates] = useState<Array<{ currency: string; value: number }>>([]);
+  const [newRates, setNewRates] = useState<Array<{ currency: string; value: number }>>([]);
+
+  useEffect(() => {
+    getCurrencyFromApi().then((rates) => {
+      console.log(rates.rates);
+      setNewRates(rates.rates);
+    });
+  }, []);
 
   return (
     <View style={styles.container}>
       <MyStatusBar style="dark" />
       <View style={styles.cardsContainer}>
-        <CurrencyCard currencySymbol="$" value={100} />
-        <CurrencyCard currencySymbol="£" value={800} />
+        <CurrencyCard currencySymbol="$" value={newRates["USD"]} />
+        <CurrencyCard currencySymbol="£" value={newRates["GBP"]} />
       </View>
     </View>
   );
