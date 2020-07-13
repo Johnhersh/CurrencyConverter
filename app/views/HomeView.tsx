@@ -26,8 +26,8 @@ const HomeView = (props: Props) => {
     <View style={styles.container}>
       <MyStatusBar style="dark" />
       <View style={styles.cardsContainer}>
-        <CurrencyCard currencySymbol="$" value={props.currencies[0].value} />
-        <CurrencyCard currencySymbol="$" value={props.currencies[1].value} />
+        <CurrencyCard currencySymbol="$" value={props.currencies["USD"]} />
+        <CurrencyCard currencySymbol="$" value={props.currencies["GBP"]} />
       </View>
     </View>
   );
