@@ -1,6 +1,5 @@
 import { createStore } from "redux";
 
-// import rootReducer from "./rootReducer";
 import currencyReducer from "./currencyReducer";
 
 export interface currency {
@@ -12,7 +11,6 @@ export interface currenciesState {
   currencies: currency[];
 }
 
-// const store = createStore(rootReducer);
 const store = createStore(currencyReducer);
 
 export default store;
