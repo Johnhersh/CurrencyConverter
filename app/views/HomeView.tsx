@@ -1,8 +1,11 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Platform, StyleSheet, View } from "react-native";
+import { connect, ConnectedProps } from "react-redux";
 
-import { getCurrencyFromApi } from "../fetchCurrencies";
+import { currenciesState } from "../redux/store";
+
+// import { getCurrencyFromApi } from "../fetchCurrencies";
 import CurrencyCard from "../components/CurrencyCard";
 
 interface StatusBarProps {
@@ -15,27 +18,31 @@ const MyStatusBar = ({ ...props }: StatusBarProps) => (
   </View>
 );
 
-export default function HomeView() {
-  // const [newRates, setNewRates] = useState<Array<{ currency: string; value: number }>>([]);
-  const [newRates, setNewRates] = useState<Array<{ currency: string; value: number }>>([]);
-
-  useEffect(() => {
-    getCurrencyFromApi().then((rates) => {
-      console.log(rates.rates);
-      setNewRates(rates.rates);
-    });
-  }, []);
+const HomeView = (props: Props) => {
+  console.log("Props:");
+  console.log(props.currencies);
 
   return (
     <View style={styles.container}>
       <MyStatusBar style="dark" />
       <View style={styles.cardsContainer}>
-        <CurrencyCard currencySymbol="$" value={newRates["USD"]} />
-        <CurrencyCard currencySymbol="£" value={newRates["GBP"]} />
+        <CurrencyCard currencySymbol="$" value={props.currencies[0].value} />
+        <CurrencyCard currencySymbol="$" value={props.currencies[1].value} />
       </View>
     </View>
   );
+};
+
+function mapStateToProps(state: currenciesState): currenciesState {
+  return {
+    ...state,
+  };
 }
+
+const connector = connect(mapStateToProps);
+type Props = ConnectedProps<typeof connector>;
+
+export default connector(HomeView);
 
 const STATUSBAR_HEIGHT = Platform.OS === "web" ? 0 : 50;
 
