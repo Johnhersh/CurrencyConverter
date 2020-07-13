@@ -2,13 +2,8 @@ import { createStore } from "redux";
 
 import currencyReducer from "./currencyReducer";
 
-export interface currency {
-  currency: string;
-  value: number;
-}
-
 export interface currenciesState {
-  currencies: currency[];
+  currencies: { [currency: string]: number };
 }
 
 const store = createStore(currencyReducer);
