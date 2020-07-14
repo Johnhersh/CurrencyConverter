@@ -18,7 +18,7 @@ const CurrencyCard: React.FC<Props> = ({ currencySymbol = "$", value = 0 }) => {
         />
       </View>
       <View style={styles.valuesContainer}>
-        <Text>{currencySymbol + value}</Text>
+        <Text>{currencySymbol + value.toFixed(3)}</Text>
       </View>
     </View>
   );
