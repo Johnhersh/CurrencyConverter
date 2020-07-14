@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { Platform, StyleSheet, View } from "react-native";
 import { connect, ConnectedProps, useStore } from "react-redux";
 
-import { currenciesState } from "../redux/store";
+import { currenciesState } from "../redux/types";
 
 import { getCurrencyFromApi } from "../fetchCurrencies";
 import CurrencyCard from "../components/CurrencyCard";

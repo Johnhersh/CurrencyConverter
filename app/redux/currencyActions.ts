@@ -1,13 +1,4 @@
-import { currenciesState } from "./store";
-
-const UPDATE_CURRENCIES = "UPDATE_CURRENCIES";
-
-interface UpdateCurrencies {
-  type: typeof UPDATE_CURRENCIES;
-  payload: currenciesState;
-}
-
-export type CurrencyActionTypes = UpdateCurrencies;
+import { currenciesState, UpdateCurrencies, UPDATE_CURRENCIES } from "./types";
 
 export function updateCurrencies(newCurrencies: currenciesState): UpdateCurrencies {
   return {
