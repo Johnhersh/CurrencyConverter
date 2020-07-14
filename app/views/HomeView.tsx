@@ -1,11 +1,11 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect } from "react";
 import { Platform, StyleSheet, View } from "react-native";
-import { connect, ConnectedProps } from "react-redux";
+import { connect, ConnectedProps, useStore } from "react-redux";
 
 import { currenciesState } from "../redux/store";
 
-// import { getCurrencyFromApi } from "../fetchCurrencies";
+import { getCurrencyFromApi } from "../fetchCurrencies";
 import CurrencyCard from "../components/CurrencyCard";
 
 interface StatusBarProps {
@@ -19,15 +19,23 @@ const MyStatusBar = ({ ...props }: StatusBarProps) => (
 );
 
 const HomeView = (props: Props) => {
-  console.log("Props:");
-  console.log(props.currencies);
+  const store = useStore();
+
+  useEffect(() => {
+    getCurrencyFromApi().then((rates) => {
+      store.dispatch({
+        type: "UPDATE_CURRENCIES",
+        payload: { currencies: rates.rates },
+      });
+    });
+  }, []);
 
   return (
     <View style={styles.container}>
       <MyStatusBar style="dark" />
       <View style={styles.cardsContainer}>
-        <CurrencyCard currencySymbol="$" value={props.currencies["USD"]} />
-        <CurrencyCard currencySymbol="$" value={props.currencies["GBP"]} />
+        <CurrencyCard currencySymbol="¥" value={props.currencies["JPY"]} />
+        <CurrencyCard currencySymbol="£" value={props.currencies["GBP"]} />
       </View>
     </View>
   );
