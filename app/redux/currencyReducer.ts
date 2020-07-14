@@ -1,5 +1,4 @@
-import { currenciesState } from "./store";
-import { CurrencyActionTypes } from "./currencyActions";
+import { currenciesState, CurrencyActionTypes } from "./types";
 
 const INITIAL_STATE: currenciesState = {
   currencies: { USD: 100, GBP: 50 },
