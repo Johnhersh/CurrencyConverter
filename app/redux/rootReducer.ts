@@ -3,8 +3,11 @@
 
 import { combineReducers } from "redux";
 
-import currencyReducer from "./currencyReducer";
+import { currencyReducer, referenceCurrencyReducer } from "./currencyReducer";
 
-export default combineReducers({
+export const rootReducers = combineReducers({
   currenciesState: currencyReducer,
+  referenceCurrencyState: referenceCurrencyReducer,
 });
+
+export type RootState = ReturnType<typeof rootReducers>;

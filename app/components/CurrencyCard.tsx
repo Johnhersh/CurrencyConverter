@@ -1,14 +1,28 @@
 import React from "react";
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
-interface Props {
+import { connect, ConnectedProps, useStore } from "react-redux";
+import { RootState } from "../redux/rootReducer";
+
+interface PropsBuiltIn {
   currencySymbol: string;
   value: number;
 }
 
-const CurrencyCard: React.FC<Props> = ({ currencySymbol = "$", value = 0 }) => {
+// const CurrencyCard: React.FC<Props> = ({ currencySymbol = "$", value = 0 }) => {
+const CurrencyCard = ({ referenceCurrencyState, currencySymbol = "$", value = 0 }: Props) => {
+  const store = useStore();
+  function onPress() {
+    store.dispatch({
+      type: "UPDATE_REFERENCE_CURRENCY",
+      payload: { referenceCurrency: currencySymbol },
+    });
+  }
+
+  console.log(referenceCurrencyState.referenceCurrency);
+
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.currencyContainer}>
         <Image
           source={{
@@ -20,9 +34,21 @@ const CurrencyCard: React.FC<Props> = ({ currencySymbol = "$", value = 0 }) => {
       <View style={styles.valuesContainer}>
         <Text>{currencySymbol + value.toFixed(3)}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
+
+function mapStateToProps(state: RootState): RootState {
+  return {
+    ...state,
+  };
+}
+
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & PropsBuiltIn;
+
+export default connector(CurrencyCard);
 
 const styles = StyleSheet.create({
   container: {
@@ -53,5 +79,3 @@ const styles = StyleSheet.create({
     paddingRight: 10,
   },
 });
-
-export default CurrencyCard;
