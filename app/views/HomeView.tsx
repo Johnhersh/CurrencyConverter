@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { Platform, StyleSheet, View } from "react-native";
 import { connect, ConnectedProps, useStore } from "react-redux";
 
-import { currenciesState } from "../redux/types";
+import { RootState } from "../redux/rootReducer";
 
 import { getCurrencyFromApi } from "../fetchCurrencies";
 import CurrencyCard from "../components/CurrencyCard";
@@ -34,14 +34,14 @@ const HomeView = (props: Props) => {
     <View style={styles.container}>
       <MyStatusBar style="dark" />
       <View style={styles.cardsContainer}>
-        <CurrencyCard currencySymbol="¥" value={props.currencies["JPY"]} />
-        <CurrencyCard currencySymbol="£" value={props.currencies["GBP"]} />
+        <CurrencyCard currencySymbol="¥" value={props.currenciesState.currencies["JPY"]} />
+        <CurrencyCard currencySymbol="£" value={props.currenciesState.currencies["GBP"]} />
       </View>
     </View>
   );
 };
 
-function mapStateToProps(state: currenciesState): currenciesState {
+function mapStateToProps(state: RootState): RootState {
   return {
     ...state,
   };

@@ -1,10 +1,18 @@
-import { currenciesState, CurrencyActionTypes } from "./types";
+import {
+  currenciesState,
+  CurrencyActionTypes,
+  ReferenceActionType,
+  referenceCurrency,
+} from "./types";
 
 const INITIAL_STATE: currenciesState = {
   currencies: { USD: 100, GBP: 50 },
 };
 
-const currencyReducer = (state = INITIAL_STATE, action: CurrencyActionTypes): currenciesState => {
+export const currencyReducer = (
+  state = INITIAL_STATE,
+  action: CurrencyActionTypes
+): currenciesState => {
   switch (action.type) {
     case "UPDATE_CURRENCIES":
       return {
@@ -15,4 +23,18 @@ const currencyReducer = (state = INITIAL_STATE, action: CurrencyActionTypes): cu
   }
 };
 
-export default currencyReducer;
+const INITIAL_REFERENCE_STATE: referenceCurrency = {
+  referenceCurrency: "USD",
+};
+
+export const referenceCurrencyReducer = (
+  state = INITIAL_REFERENCE_STATE,
+  action: ReferenceActionType
+): referenceCurrency => {
+  switch (action.type) {
+    case "UPDATE_REFERENCE_CURRENCY":
+      return action.payload;
+    default:
+      return state;
+  }
+};
