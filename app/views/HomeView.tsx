@@ -23,14 +23,15 @@ const HomeView = (props: Props) => {
   const store = useStore();
 
   useEffect(() => {
-    getCurrencyFromApi().then((rates) => {
+    getCurrencyFromApi(props.referenceCurrencyState.referenceName).then((rates) => {
       store.dispatch({
         type: "UPDATE_CURRENCIES",
         payload: { currencies: rates.rates },
       });
     });
-  }, []);
+  }, [props.referenceCurrencyState.referenceCurrency]);
 
+  // Todo: Change this to a list of currencies stored in Redux
   return (
     <View style={styles.container}>
       <MyStatusBar style="dark" />
@@ -45,6 +46,11 @@ const HomeView = (props: Props) => {
           currencySymbol="£"
           currencyName="GBP"
           value={props.currenciesState.currencies["GBP"]}
+        />
+        <CurrencyCard
+          currencySymbol="€"
+          currencyName="EUR"
+          value={props.currenciesState.currencies["EUR"]}
         />
       </View>
     </View>
