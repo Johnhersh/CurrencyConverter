@@ -7,6 +7,7 @@ export interface currenciesState {
 
 export interface referenceCurrency {
   referenceCurrency: string;
+  referenceName: string;
 }
 
 export interface UpdateCurrencies {
