@@ -18,6 +18,7 @@ const CurrencyCard = ({
   value = 0,
 }: Props) => {
   const store = useStore();
+
   function onPress() {
     store.dispatch({
       type: "UPDATE_REFERENCE_CURRENCY",

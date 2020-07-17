@@ -7,7 +7,7 @@ const ReferenceCurrencyCard = ({ referenceCurrencyState }: Props) => {
   return (
     <View style={styles.container}>
       <Text>
-        {referenceCurrencyState.referenceCurrency}100{referenceCurrencyState.referenceName}
+        {referenceCurrencyState.referenceCurrency}1{referenceCurrencyState.referenceName}
       </Text>
     </View>
   );
