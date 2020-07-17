@@ -7,6 +7,7 @@ import { RootState } from "../redux/rootReducer";
 
 import { getCurrencyFromApi } from "../fetchCurrencies";
 import CurrencyCard from "../components/CurrencyCard";
+import ReferenceCurrencyCard from "../components/ReferenceCurrencyCard";
 
 interface StatusBarProps {
   style: "auto" | "inverted" | "light" | "dark" | undefined;
@@ -34,8 +35,17 @@ const HomeView = (props: Props) => {
     <View style={styles.container}>
       <MyStatusBar style="dark" />
       <View style={styles.cardsContainer}>
-        <CurrencyCard currencySymbol="¥" value={props.currenciesState.currencies["JPY"]} />
-        <CurrencyCard currencySymbol="£" value={props.currenciesState.currencies["GBP"]} />
+        <ReferenceCurrencyCard />
+        <CurrencyCard
+          currencySymbol="¥"
+          currencyName="JPY"
+          value={props.currenciesState.currencies["JPY"]}
+        />
+        <CurrencyCard
+          currencySymbol="£"
+          currencyName="GBP"
+          value={props.currenciesState.currencies["GBP"]}
+        />
       </View>
     </View>
   );

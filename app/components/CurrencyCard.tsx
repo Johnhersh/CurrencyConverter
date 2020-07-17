@@ -6,16 +6,22 @@ import { RootState } from "../redux/rootReducer";
 
 interface PropsBuiltIn {
   currencySymbol: string;
+  currencyName: string;
   value: number;
 }
 
 // const CurrencyCard: React.FC<Props> = ({ currencySymbol = "$", value = 0 }) => {
-const CurrencyCard = ({ referenceCurrencyState, currencySymbol = "$", value = 0 }: Props) => {
+const CurrencyCard = ({
+  referenceCurrencyState,
+  currencySymbol = "$",
+  currencyName = "USD",
+  value = 0,
+}: Props) => {
   const store = useStore();
   function onPress() {
     store.dispatch({
       type: "UPDATE_REFERENCE_CURRENCY",
-      payload: { referenceCurrency: currencySymbol },
+      payload: { referenceCurrency: currencySymbol, referenceName: currencyName },
     });
   }
 
