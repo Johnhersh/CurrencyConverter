@@ -1,5 +1,5 @@
 export const UPDATE_CURRENCIES = "UPDATE_CURRENCIES";
-export const UPDATE_PRIME = "UPDATE_REFERENCE_CURRENCY";
+export const UPDATE_REFERENCE = "UPDATE_REFERENCE_CURRENCY";
 
 export const ADD_TO_CURRENCY_LIST = "ADD_TO_CURRENCY_LIST";
 export const REMOVE_FROM_CURRENCY_LIST = "ADD_TO_CURRENCY_LIST";
@@ -40,7 +40,7 @@ export interface referenceCurrency {
 }
 
 export interface UpdateRefrence {
-  type: typeof UPDATE_PRIME;
+  type: typeof UPDATE_REFERENCE;
   payload: referenceCurrency;
 }
 
