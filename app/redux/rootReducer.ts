@@ -4,8 +4,10 @@
 import { combineReducers } from "redux";
 
 import { currencyReducer, referenceCurrencyReducer } from "./currencyReducer";
+import { currencyListReducer } from "./currencyListReducer";
 
 export const rootReducers = combineReducers({
+  currencyList: currencyListReducer,
   currenciesState: currencyReducer,
   referenceCurrencyState: referenceCurrencyReducer,
 });

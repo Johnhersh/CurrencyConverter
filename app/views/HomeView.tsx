@@ -23,6 +23,8 @@ const HomeView = (props: Props) => {
   const store = useStore();
 
   useEffect(() => {
+    console.log("Currency List");
+    console.log(props.currencyList.currencies);
     getCurrencyFromApi(props.referenceCurrencyState.referenceName).then((rates) => {
       store.dispatch({
         type: "UPDATE_CURRENCIES",
@@ -37,21 +39,9 @@ const HomeView = (props: Props) => {
       <MyStatusBar style="dark" />
       <View style={styles.cardsContainer}>
         <ReferenceCurrencyCard />
-        <CurrencyCard
-          currencySymbol="¥"
-          currencyName="JPY"
-          value={props.currenciesState.currencies["JPY"]}
-        />
-        <CurrencyCard
-          currencySymbol="£"
-          currencyName="GBP"
-          value={props.currenciesState.currencies["GBP"]}
-        />
-        <CurrencyCard
-          currencySymbol="€"
-          currencyName="EUR"
-          value={props.currenciesState.currencies["EUR"]}
-        />
+        {props.currencyList.currencies.map((currency) => {
+          return <CurrencyCard key={currency} currencyName={currency} />;
+        })}
       </View>
     </View>
   );
