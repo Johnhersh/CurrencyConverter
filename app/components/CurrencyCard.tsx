@@ -11,12 +11,7 @@ interface PropsBuiltIn {
 }
 
 // const CurrencyCard: React.FC<Props> = ({ currencySymbol = "$", value = 0 }) => {
-const CurrencyCard = ({
-  referenceCurrencyState,
-  currencySymbol = "$",
-  currencyName = "USD",
-  value = 0,
-}: Props) => {
+const CurrencyCard = ({ currencySymbol = "$", currencyName = "USD", value = 0 }: Props) => {
   const store = useStore();
 
   function onPress() {
@@ -25,8 +20,6 @@ const CurrencyCard = ({
       payload: { referenceCurrency: currencySymbol, referenceName: currencyName },
     });
   }
-
-  console.log(referenceCurrencyState.referenceCurrency);
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
