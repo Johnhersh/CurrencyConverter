@@ -31,7 +31,6 @@ const HomeView = (props: Props) => {
     });
   }, [props.referenceCurrencyState.referenceCurrencySymbol]);
 
-  // Todo: Change this to a list of currencies stored in Redux
   return (
     <View style={styles.container}>
       <MyStatusBar style="dark" />
