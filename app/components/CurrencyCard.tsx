@@ -4,20 +4,29 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { connect, ConnectedProps, useStore } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 
+import { currencySymbols } from "../redux/types";
+
 interface PropsBuiltIn {
-  currencySymbol: string;
   currencyName: string;
-  value: number;
 }
 
-// const CurrencyCard: React.FC<Props> = ({ currencySymbol = "$", value = 0 }) => {
-const CurrencyCard = ({ currencySymbol = "$", currencyName = "USD", value = 0 }: Props) => {
+const CurrencyCard = ({ currencyName = "USD", currenciesState }: Props) => {
   const store = useStore();
+  const currencySymbol = currencySymbols[currencyName];
+
+  // Doing this because currencyValue will be undefined until the values get propagated into the state:
+  let currencyValue = "100";
+  if (currenciesState.currencies[currencyName])
+    currencyValue = currenciesState.currencies[currencyName].toFixed(3);
 
   function onPress() {
     store.dispatch({
       type: "UPDATE_REFERENCE_CURRENCY",
       payload: { referenceCurrency: currencySymbol, referenceName: currencyName },
+    });
+    store.dispatch({
+      type: "REMOVE_FROM_CURRENCY_LIST",
+      payload: {},
     });
   }
 
@@ -32,7 +41,7 @@ const CurrencyCard = ({ currencySymbol = "$", currencyName = "USD", value = 0 }:
         />
       </View>
       <View style={styles.valuesContainer}>
-        <Text>{currencySymbol + value.toFixed(3)}</Text>
+        <Text>{currencySymbol + currencyValue}</Text>
       </View>
     </TouchableOpacity>
   );

@@ -6,7 +6,7 @@ import {
 } from "./types";
 
 const INITIAL_STATE: currenciesDataState = {
-  currencies: { USD: 100, GBP: 50 },
+  currencies: { EUR: 100, GBP: 100 },
 };
 
 export const currencyReducer = (

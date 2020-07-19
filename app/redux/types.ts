@@ -2,30 +2,32 @@ export const UPDATE_CURRENCIES = "UPDATE_CURRENCIES";
 export const UPDATE_REFERENCE = "UPDATE_REFERENCE_CURRENCY";
 
 export const ADD_TO_CURRENCY_LIST = "ADD_TO_CURRENCY_LIST";
-export const REMOVE_FROM_CURRENCY_LIST = "ADD_TO_CURRENCY_LIST";
+export const REMOVE_FROM_CURRENCY_LIST = "REMOVE_FROM_CURRENCY_LIST";
+
+export const currencySymbols: { [name: string]: string } = {
+  USD: "$",
+  GBP: "£",
+  JPY: "¥",
+  EUR: "€",
+};
 
 // Currency List:
-interface currencyListItem {
-  currencySymbol: string;
-  currencyName: string;
-}
-
 export interface currencyListState {
-  currencies: currencyListItem[];
+  currencies: string[];
 }
 
 interface AddToCurrencyList {
   type: typeof ADD_TO_CURRENCY_LIST;
-  payload: currencyListItem;
+  payload: string[];
 }
 interface RemoveFromCurrencyList {
   type: typeof REMOVE_FROM_CURRENCY_LIST;
-  payload: currencyListItem;
+  payload: string;
 }
 
 // Currencies Data:
 export interface currenciesDataState {
-  currencies: { [currency: string]: number };
+  currencies: { [currencyName: string]: number };
 }
 
 export interface UpdateCurrencies {
