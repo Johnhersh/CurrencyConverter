@@ -13,10 +13,15 @@ export const currencyListReducer = (
       return {
         currencies: [...state.currencies, ...action.payload],
       };
-    case "REMOVE_FROM_CURRENCY_LIST":
-      return {
-        currencies: state.currencies,
-      };
+    case "REMOVE_FROM_CURRENCY_LIST": {
+      let newState = state.currencies;
+      for (let i = 0; i < newState.length; i++) {
+        if (newState[i] === action.payload) {
+          newState.splice(i, 1);
+        }
+      }
+      return { currencies: newState };
+    }
     default:
       return state;
   }
