@@ -1,18 +1,18 @@
 import {
-  currenciesState,
+  currenciesDataState,
   CurrencyActionTypes,
   ReferenceActionType,
   referenceCurrency,
 } from "./types";
 
-const INITIAL_STATE: currenciesState = {
+const INITIAL_STATE: currenciesDataState = {
   currencies: { USD: 100, GBP: 50 },
 };
 
 export const currencyReducer = (
   state = INITIAL_STATE,
   action: CurrencyActionTypes
-): currenciesState => {
+): currenciesDataState => {
   switch (action.type) {
     case "UPDATE_CURRENCIES":
       return {
@@ -24,7 +24,7 @@ export const currencyReducer = (
 };
 
 const INITIAL_REFERENCE_STATE: referenceCurrency = {
-  referenceCurrency: "$",
+  referenceCurrencySymbol: "$",
   referenceName: "USD",
 };
 

@@ -29,7 +29,7 @@ const HomeView = (props: Props) => {
         payload: { currencies: rates.rates },
       });
     });
-  }, [props.referenceCurrencyState.referenceCurrency]);
+  }, [props.referenceCurrencyState.referenceCurrencySymbol]);
 
   // Todo: Change this to a list of currencies stored in Redux
   return (
