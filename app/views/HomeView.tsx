@@ -23,8 +23,6 @@ const HomeView = (props: Props) => {
   const store = useStore();
 
   useEffect(() => {
-    console.log("Currency List");
-    console.log(props.currencyList.currencies);
     getCurrencyFromApi(props.referenceCurrencyState.referenceName).then((rates) => {
       store.dispatch({
         type: "UPDATE_CURRENCIES",
