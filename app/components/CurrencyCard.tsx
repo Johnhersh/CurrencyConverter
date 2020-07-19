@@ -26,7 +26,7 @@ const CurrencyCard = ({ currencyName = "USD", currenciesState }: Props) => {
     });
     store.dispatch({
       type: "REMOVE_FROM_CURRENCY_LIST",
-      payload: {},
+      payload: currencyName,
     });
   }
 
