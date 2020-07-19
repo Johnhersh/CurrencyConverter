@@ -9,6 +9,7 @@ export const currencySymbols: { [name: string]: string } = {
   GBP: "£",
   JPY: "¥",
   EUR: "€",
+  DKK: "kr.",
 };
 
 // Currency List:
@@ -18,7 +19,7 @@ export interface currencyListState {
 
 interface AddToCurrencyList {
   type: typeof ADD_TO_CURRENCY_LIST;
-  payload: string[];
+  payload: string;
 }
 interface RemoveFromCurrencyList {
   type: typeof REMOVE_FROM_CURRENCY_LIST;

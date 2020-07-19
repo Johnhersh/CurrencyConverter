@@ -29,7 +29,7 @@ const HomeView = (props: Props) => {
         payload: { currencies: rates.rates },
       });
     });
-  }, [props.referenceCurrencyState.referenceCurrencySymbol]);
+  }, [props.referenceCurrencyState]);
 
   return (
     <View style={styles.container}>

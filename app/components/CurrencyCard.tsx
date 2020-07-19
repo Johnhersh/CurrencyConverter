@@ -10,7 +10,7 @@ interface PropsBuiltIn {
   currencyName: string;
 }
 
-const CurrencyCard = ({ currencyName = "USD", currenciesState }: Props) => {
+const CurrencyCard = ({ currencyName = "USD", currenciesState, referenceCurrencyState }: Props) => {
   const store = useStore();
   const currencySymbol = currencySymbols[currencyName];
 
@@ -21,12 +21,16 @@ const CurrencyCard = ({ currencyName = "USD", currenciesState }: Props) => {
 
   function onPress() {
     store.dispatch({
-      type: "UPDATE_REFERENCE_CURRENCY",
-      payload: { referenceCurrency: currencySymbol, referenceName: currencyName },
+      type: "ADD_TO_CURRENCY_LIST",
+      payload: referenceCurrencyState.referenceName,
     });
     store.dispatch({
       type: "REMOVE_FROM_CURRENCY_LIST",
       payload: currencyName,
+    });
+    store.dispatch({
+      type: "UPDATE_REFERENCE_CURRENCY",
+      payload: { referenceCurrency: currencySymbol, referenceName: currencyName },
     });
   }
 
