@@ -1,7 +1,7 @@
 import { currencyListState, CurrencyListActionTypes } from "./types";
 
 const INITIAL_LIST_STATE: currencyListState = {
-  currencies: ["GBP", "EUR", "JPY"],
+  currencies: ["GBP", "EUR", "JPY", "DKK"],
 };
 
 export const currencyListReducer = (
@@ -11,7 +11,7 @@ export const currencyListReducer = (
   switch (action.type) {
     case "ADD_TO_CURRENCY_LIST":
       return {
-        currencies: [...state.currencies, ...action.payload],
+        currencies: [action.payload, ...state.currencies],
       };
     case "REMOVE_FROM_CURRENCY_LIST": {
       let newState = state.currencies;
