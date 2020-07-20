@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { connect, ConnectedProps, useStore } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 
-import { currencySymbols } from "../redux/types";
+import { currencySymbols, currencyNames } from "../redux/types";
 
 const currencyIcons: { [name: string]: any } = {
   USD: require("../../assets/CurrencyIcons/USD.png"),
@@ -48,6 +48,10 @@ const CurrencyCard = ({ currencyName = "USD", currenciesState, referenceCurrency
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.currencyContainer}>
         <Image source={currencyIcons[currencyName]} style={styles.imageContainer} />
+        <View style={styles.currencyLongNameContainer}>
+          <Text style={{ fontSize: 20 }}>{currencyName}</Text>
+          <Text>{currencyNames[currencyName]}</Text>
+        </View>
       </View>
       <View style={styles.valuesContainer}>
         <Text>{currencySymbol + currencyValue}</Text>
@@ -83,14 +87,21 @@ const styles = StyleSheet.create({
     borderColor: "#adadad",
   },
   currencyContainer: {
+    display: "flex",
+    flexDirection: "row",
     flex: 1,
     paddingLeft: 10,
   },
   imageContainer: {
     width: 50,
     height: 50,
-    // borderRadius: 100,
     borderRadius: 7,
+    backgroundColor: "blue",
+  },
+  currencyLongNameContainer: {
+    flex: 1,
+    justifyContent: "center",
+    paddingLeft: 10,
   },
   valuesContainer: {
     flex: 1,
