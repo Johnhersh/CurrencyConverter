@@ -6,6 +6,16 @@ import { RootState } from "../redux/rootReducer";
 
 import { currencySymbols } from "../redux/types";
 
+const currencyIcons: { [name: string]: any } = {
+  USD: require("../../assets/CurrencyIcons/USD.png"),
+  EUR: require("../../assets/CurrencyIcons/EUR.png"),
+  GBP: require("../../assets/CurrencyIcons/GBP.png"),
+  JPY: require("../../assets/CurrencyIcons/JPY.png"),
+  DKK: require("../../assets/CurrencyIcons/DKK.png"),
+  SEK: require("../../assets/CurrencyIcons/SEK.png"),
+  CAD: require("../../assets/CurrencyIcons/CAD.png"),
+};
+
 interface PropsBuiltIn {
   currencyName: string;
 }
@@ -37,12 +47,7 @@ const CurrencyCard = ({ currencyName = "USD", currenciesState, referenceCurrency
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.currencyContainer}>
-        <Image
-          source={{
-            uri: "https://cdn.countryflags.com/thumbs/united-states-of-america/flag-square-250.png",
-          }}
-          style={styles.imageContainer}
-        />
+        <Image source={currencyIcons[currencyName]} style={styles.imageContainer} />
       </View>
       <View style={styles.valuesContainer}>
         <Text>{currencySymbol + currencyValue}</Text>
@@ -84,7 +89,8 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: 50,
     height: 50,
-    borderRadius: 100,
+    // borderRadius: 100,
+    borderRadius: 7,
   },
   valuesContainer: {
     flex: 1,

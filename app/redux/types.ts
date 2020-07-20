@@ -10,6 +10,8 @@ export const currencySymbols: { [name: string]: string } = {
   JPY: "¥",
   EUR: "€",
   DKK: "kr.",
+  SEK: "kr",
+  CAD: "$",
 };
 
 // Currency List:
