@@ -14,6 +14,16 @@ export const currencySymbols: { [name: string]: string } = {
   CAD: "$",
 };
 
+export const currencyNames: { [name: string]: string } = {
+  USD: "US Dollar",
+  GBP: "British Pound",
+  JPY: "Japanese Yen",
+  EUR: "EURO",
+  DKK: "Danish Krone",
+  SEK: "Sweidsh Krone",
+  CAD: "Canadian Dollar",
+};
+
 // Currency List:
 export interface currencyListState {
   currencies: string[];
