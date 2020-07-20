@@ -5,23 +5,31 @@ export const ADD_TO_CURRENCY_LIST = "ADD_TO_CURRENCY_LIST";
 export const REMOVE_FROM_CURRENCY_LIST = "REMOVE_FROM_CURRENCY_LIST";
 
 export const currencySymbols: { [name: string]: string } = {
-  USD: "$",
-  GBP: "£",
-  JPY: "¥",
-  EUR: "€",
-  DKK: "kr.",
-  SEK: "kr",
   CAD: "$",
+  ISK: "Íkr",
+  DKK: "kr.",
+  GBP: "£",
+  SEK: "kr",
+  JPY: "¥",
+  CHF: "CHf",
+  EUR: "€",
+  USD: "$",
+  AUD: "A$",
+  ILS: "₪",
 };
 
 export const currencyNames: { [name: string]: string } = {
-  USD: "US Dollar",
-  GBP: "British Pound",
-  JPY: "Japanese Yen",
-  EUR: "EURO",
-  DKK: "Danish Krone",
-  SEK: "Sweidsh Krone",
   CAD: "Canadian Dollar",
+  ISK: "Icelandic Króna",
+  DKK: "Danish Krone",
+  GBP: "British Pound",
+  SEK: "Swedish Krone",
+  JPY: "Japanese Yen",
+  CHF: "Swiss Franc",
+  EUR: "EURO",
+  USD: "US Dollar",
+  AUD: "Australian Dollar",
+  ILS: "Israeli Shekel",
 };
 
 // Currency List:

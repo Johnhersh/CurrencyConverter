@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   },
   cardsContainer: {
     flex: 1,
-    width: "60%",
+    width: "80%",
   },
   statusBar: {
     height: STATUSBAR_HEIGHT,
