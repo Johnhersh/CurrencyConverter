@@ -1,7 +1,7 @@
 import { currencyListState, CurrencyListActionTypes } from "./types";
 
 const INITIAL_LIST_STATE: currencyListState = {
-  currencies: ["GBP", "EUR", "JPY", "DKK"],
+  currencies: ["GBP", "EUR", "JPY", "DKK", "CAD", "SEK"],
 };
 
 export const currencyListReducer = (
