@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     maxHeight: 70,
     marginHorizontal: 2,
-    marginVertical: 1,
+    marginVertical: 5,
     borderRadius: 7,
     borderWidth: 1,
     borderColor: "#adadad",
