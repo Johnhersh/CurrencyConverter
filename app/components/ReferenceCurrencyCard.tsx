@@ -1,14 +1,14 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { connect, ConnectedProps, useStore } from "react-redux";
+import { TextInput, StyleSheet, Text, View } from "react-native";
+import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 
 const ReferenceCurrencyCard = ({ referenceCurrencyState }: Props) => {
   return (
     <View style={styles.container}>
-      <Text>
-        {referenceCurrencyState.referenceCurrencySymbol}1{referenceCurrencyState.referenceName}
-      </Text>
+      <Text>{referenceCurrencyState.referenceCurrencySymbol}</Text>
+      <TextInput style={styles.textInputStyle} keyboardType={"decimal-pad"} />
+      <Text>{referenceCurrencyState.referenceName}</Text>
     </View>
   );
 };
@@ -39,5 +39,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#adadad",
     backgroundColor: "lightblue",
+  },
+  textInputStyle: {
+    backgroundColor: "white",
+    flex: -1,
   },
 });
