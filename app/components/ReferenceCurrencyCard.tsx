@@ -1,15 +1,23 @@
-import React from "react";
-import { TextInput, StyleSheet, Text, View } from "react-native";
+import React, { useRef } from "react";
+import { TextInput, StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 
 const ReferenceCurrencyCard = ({ referenceCurrencyState }: Props) => {
+  const textInput = useRef<TextInput>(null);
+
   return (
-    <View style={styles.container}>
-      <Text>{referenceCurrencyState.referenceCurrencySymbol}</Text>
-      <TextInput style={styles.textInputStyle} keyboardType={"decimal-pad"} />
-      <Text>{referenceCurrencyState.referenceName}</Text>
-    </View>
+    <TouchableWithoutFeedback
+      onPress={() => {
+        textInput.current?.focus();
+      }}
+    >
+      <View style={styles.container}>
+        <Text>{referenceCurrencyState.referenceCurrencySymbol}</Text>
+        <TextInput ref={textInput} style={styles.textInputStyle} keyboardType={"decimal-pad"} />
+        <Text>{referenceCurrencyState.referenceName}</Text>
+      </View>
+    </TouchableWithoutFeedback>
   );
 };
 

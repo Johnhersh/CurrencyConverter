@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
-import { Platform, StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View, Keyboard, TouchableWithoutFeedback } from "react-native";
 import { connect, ConnectedProps, useStore } from "react-redux";
 
 import { RootState } from "../redux/rootReducer";
@@ -32,15 +32,17 @@ const HomeView = (props: Props) => {
   }, [props.referenceCurrencyState]);
 
   return (
-    <View style={styles.container}>
-      <MyStatusBar style="dark" />
-      <View style={styles.cardsContainer}>
-        <ReferenceCurrencyCard />
-        {props.currencyList.currencies.map((currency) => {
-          return <CurrencyCard key={currency} currencyName={currency} />;
-        })}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <MyStatusBar style="dark" />
+        <View style={styles.cardsContainer}>
+          <ReferenceCurrencyCard />
+          {props.currencyList.currencies.map((currency) => {
+            return <CurrencyCard key={currency} currencyName={currency} />;
+          })}
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
