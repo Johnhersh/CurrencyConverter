@@ -30,6 +30,7 @@ const CurrencyCard = ({ currencyName = "USD", currenciesState, referenceCurrency
     currencyValue = (
       currenciesState.currencies[currencyName] * referenceCurrencyState.referenceMultiplier
     ).toFixed(3);
+  const valueFontSize = 18 - referenceCurrencyState.referenceMultiplier.toString().length; // I want the text to shrink slightly with the amount of digits
 
   function onPress() {
     store.dispatch({
@@ -60,7 +61,7 @@ const CurrencyCard = ({ currencyName = "USD", currenciesState, referenceCurrency
         </View>
       </View>
       <View style={styles.valuesContainer}>
-        <Text>{currencySymbol + " " + currencyValue}</Text>
+        <Text style={{ fontSize: valueFontSize }}>{currencySymbol + " " + currencyValue}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
   currencyContainer: {
     display: "flex",
     flexDirection: "row",
-    flex: 1,
+    flex: 2,
     paddingLeft: 10,
   },
   imageContainer: {
