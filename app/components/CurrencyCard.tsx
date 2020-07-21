@@ -27,7 +27,9 @@ const CurrencyCard = ({ currencyName = "USD", currenciesState, referenceCurrency
   // Doing this because currencyValue will be undefined until the values get propagated into the state:
   let currencyValue = "100";
   if (currenciesState.currencies[currencyName])
-    currencyValue = currenciesState.currencies[currencyName].toFixed(3);
+    currencyValue = (
+      currenciesState.currencies[currencyName] * referenceCurrencyState.referenceMultiplier
+    ).toFixed(3);
 
   function onPress() {
     store.dispatch({
