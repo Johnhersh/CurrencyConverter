@@ -7,13 +7,19 @@ const ReferenceCurrencyCard = ({ referenceCurrencyState }: Props) => {
   const textInput = useRef<TextInput>(null);
   const store = useStore();
 
+  // Doing this because sometimes the value can be blank, represented by 0
+  let textValue = referenceCurrencyState.referenceMultiplier.toString();
+  if (textValue === "0") textValue = "";
+
   function onChangeText(newText: string) {
+    let newValue = parseFloat(newText);
+    if (newText.length == 0) newValue = 0;
     store.dispatch({
       type: "UPDATE_REFERENCE_CURRENCY",
       payload: {
         referenceCurrencySymbol: referenceCurrencyState.referenceCurrencySymbol,
         referenceName: referenceCurrencyState.referenceName,
-        referenceMultiplier: parseFloat(newText),
+        referenceMultiplier: newValue,
       },
     });
   }
@@ -25,15 +31,15 @@ const ReferenceCurrencyCard = ({ referenceCurrencyState }: Props) => {
       }}
     >
       <View style={styles.container}>
-        <Text>{referenceCurrencyState.referenceCurrencySymbol}</Text>
+        <Text>{referenceCurrencyState.referenceCurrencySymbol + " "}</Text>
         <TextInput
-          value={referenceCurrencyState.referenceMultiplier.toString()}
+          value={textValue}
           ref={textInput}
           style={styles.textInputStyle}
           keyboardType={"numeric"}
           onChangeText={(text) => onChangeText(text)}
         />
-        <Text>{referenceCurrencyState.referenceName}</Text>
+        <Text>{" " + referenceCurrencyState.referenceName}</Text>
       </View>
     </TouchableWithoutFeedback>
   );
