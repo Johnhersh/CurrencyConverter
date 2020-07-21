@@ -40,7 +40,11 @@ const CurrencyCard = ({ currencyName = "USD", currenciesState, referenceCurrency
     });
     store.dispatch({
       type: "UPDATE_REFERENCE_CURRENCY",
-      payload: { referenceCurrency: currencySymbol, referenceName: currencyName },
+      payload: {
+        referenceCurrencySymbol: currencySymbol,
+        referenceName: currencyName,
+        referenceAmount: referenceCurrencyState.referenceAmount,
+      },
     });
   }
 
