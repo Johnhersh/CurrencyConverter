@@ -45,7 +45,7 @@ const CurrencyCard = ({ currencyName = "USD", currenciesState, referenceCurrency
       payload: {
         referenceCurrencySymbol: currencySymbol,
         referenceName: currencyName,
-        referenceMultiplier: referenceCurrencyState.referenceMultiplier,
+        referenceMultiplier: currencyValue,
       },
     });
   }
@@ -60,7 +60,7 @@ const CurrencyCard = ({ currencyName = "USD", currenciesState, referenceCurrency
         </View>
       </View>
       <View style={styles.valuesContainer}>
-        <Text>{currencySymbol + currencyValue}</Text>
+        <Text>{currencySymbol + " " + currencyValue}</Text>
       </View>
     </TouchableOpacity>
   );
