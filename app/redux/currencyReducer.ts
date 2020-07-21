@@ -26,6 +26,7 @@ export const currencyReducer = (
 const INITIAL_REFERENCE_STATE: referenceCurrency = {
   referenceCurrencySymbol: "$",
   referenceName: "USD",
+  referenceMultiplier: 1,
 };
 
 export const referenceCurrencyReducer = (

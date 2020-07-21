@@ -43,7 +43,7 @@ const CurrencyCard = ({ currencyName = "USD", currenciesState, referenceCurrency
       payload: {
         referenceCurrencySymbol: currencySymbol,
         referenceName: currencyName,
-        referenceAmount: referenceCurrencyState.referenceAmount,
+        referenceMultiplier: referenceCurrencyState.referenceMultiplier,
       },
     });
   }

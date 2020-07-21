@@ -1,10 +1,22 @@
 import React, { useRef } from "react";
 import { TextInput, StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
-import { connect, ConnectedProps } from "react-redux";
+import { connect, ConnectedProps, useStore } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 
 const ReferenceCurrencyCard = ({ referenceCurrencyState }: Props) => {
   const textInput = useRef<TextInput>(null);
+  const store = useStore();
+
+  function onChangeText(newText: string) {
+    store.dispatch({
+      type: "UPDATE_REFERENCE_CURRENCY",
+      payload: {
+        referenceCurrencySymbol: referenceCurrencyState.referenceCurrencySymbol,
+        referenceName: referenceCurrencyState.referenceName,
+        referenceMultiplier: parseFloat(newText),
+      },
+    });
+  }
 
   return (
     <TouchableWithoutFeedback
@@ -14,7 +26,13 @@ const ReferenceCurrencyCard = ({ referenceCurrencyState }: Props) => {
     >
       <View style={styles.container}>
         <Text>{referenceCurrencyState.referenceCurrencySymbol}</Text>
-        <TextInput ref={textInput} style={styles.textInputStyle} keyboardType={"decimal-pad"} />
+        <TextInput
+          value={referenceCurrencyState.referenceMultiplier.toString()}
+          ref={textInput}
+          style={styles.textInputStyle}
+          keyboardType={"decimal-pad"}
+          onChangeText={(text) => onChangeText(text)}
+        />
         <Text>{referenceCurrencyState.referenceName}</Text>
       </View>
     </TouchableWithoutFeedback>
