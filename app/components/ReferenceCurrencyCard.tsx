@@ -30,7 +30,7 @@ const ReferenceCurrencyCard = ({ referenceCurrencyState }: Props) => {
           value={referenceCurrencyState.referenceMultiplier.toString()}
           ref={textInput}
           style={styles.textInputStyle}
-          keyboardType={"decimal-pad"}
+          keyboardType={"numeric"}
           onChangeText={(text) => onChangeText(text)}
         />
         <Text>{referenceCurrencyState.referenceName}</Text>
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     maxHeight: 70,
     marginHorizontal: 2,
-    marginVertical: 1,
+    marginVertical: 5,
     borderRadius: 7,
     borderWidth: 1,
     borderColor: "#adadad",
