@@ -29,7 +29,7 @@ const HomeView = (props: Props) => {
         payload: { currencies: rates.rates },
       });
     });
-  }, [props.referenceCurrencyState]);
+  }, [props.referenceCurrencyState.referenceName]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

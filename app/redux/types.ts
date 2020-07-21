@@ -60,6 +60,7 @@ export interface UpdateCurrencies {
 export interface referenceCurrency {
   referenceCurrencySymbol: string;
   referenceName: string;
+  referenceMultiplier: number;
 }
 
 export interface UpdateRefrence {
