@@ -1,9 +1,8 @@
-const currencyURL = "https://api.exchangeratesapi.io/latest?";
+const currencyURL = "https://api.exchangeratesapi.io/latest?base=";
 
 export async function getCurrencyFromApi(referenceCurrencyName: string) {
-  console.log("Fetching: " + currencyURL + "base=" + referenceCurrencyName);
   try {
-    let response = await fetch(currencyURL + "base=" + referenceCurrencyName, {
+    let response = await fetch(currencyURL + referenceCurrencyName, {
       method: "GET",
     });
     let json = await response.json();
