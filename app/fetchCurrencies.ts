@@ -14,32 +14,24 @@ export async function getCurrenciesFromApi(
 ): Promise<currenciesDataState> {
   let newRates: currenciesDataState = { currencies: {} };
 
-  let currencyRates = await getCurrencyFromAPI(referenceCurrencyName);
+  let url = currencyURL + referenceCurrencyName;
+  let currencyRates = await getCurrencyFromAPI(url);
   newRates.currencies = currencyRates.rates;
 
-  let cryptoRates = await getCryptoCurrenciesFromAPI(referenceCurrencyName);
-  newRates.currencies = { ...newRates.currencies, ["BTC"]: cryptoRates.bitcoin.usd };
+  url = cryptoCurrencyURL + cryptoCurrencyNames["BTC"] + "&vs_currencies=" + referenceCurrencyName;
+  let cryptoRates = await getCurrencyFromAPI(url);
+
+  newRates.currencies = {
+    ...newRates.currencies,
+    ["BTC"]: cryptoRates.bitcoin[referenceCurrencyName.toLowerCase()],
+  };
 
   return newRates;
 }
 
-async function getCurrencyFromAPI(referenceCurrencyName: string): Promise<any> {
+async function getCurrencyFromAPI(URL: string): Promise<any> {
   try {
-    let response = await fetch(currencyURL + referenceCurrencyName, {
-      method: "GET",
-    });
-    let json = await response.json();
-    return json;
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-async function getCryptoCurrenciesFromAPI(referenceCurrencyName: string): Promise<any> {
-  let url =
-    cryptoCurrencyURL + cryptoCurrencyNames["BTC"] + "&vs_currencies=" + referenceCurrencyName;
-  try {
-    let response = await fetch(url, {
+    let response = await fetch(URL, {
       method: "GET",
     });
     let json = await response.json();
