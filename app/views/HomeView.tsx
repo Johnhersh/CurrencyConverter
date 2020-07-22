@@ -23,12 +23,12 @@ const HomeView = (props: Props) => {
   const store = useStore();
 
   useEffect(() => {
-    let newRates = getCurrenciesFromApi(props.referenceCurrencyState.referenceName);
-    console.log("Got new currencies: ");
-    console.log(newRates);
-    store.dispatch({
-      type: "UPDATE_CURRENCIES",
-      payload: { currencies: newRates.currencies },
+    // Using a .then because we have to wait to dispatch until all the values are propagated
+    getCurrenciesFromApi(props.referenceCurrencyState.referenceName).then((newRates) => {
+      store.dispatch({
+        type: "UPDATE_CURRENCIES",
+        payload: newRates,
+      });
     });
   }, [props.referenceCurrencyState.referenceName]);
 

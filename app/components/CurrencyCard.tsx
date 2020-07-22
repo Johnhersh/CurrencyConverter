@@ -27,10 +27,11 @@ const CurrencyCard = ({ currencyName = "USD", currenciesState, referenceCurrency
 
   // Doing this because currencyValue will be undefined until the values get propagated into the state:
   let currencyValue = "100";
-  if (currenciesState.currencies[currencyName])
+  if (currenciesState.currencies[currencyName]) {
     currencyValue = (
       currenciesState.currencies[currencyName] * referenceCurrencyState.referenceMultiplier
     ).toFixed(3);
+  } else console.log("can't find currency value!");
   const valueFontSize = 18 - referenceCurrencyState.referenceMultiplier.toString().length; // I want the text to shrink slightly with the amount of digits
 
   function onPress() {

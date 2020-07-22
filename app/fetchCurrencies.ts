@@ -8,23 +8,18 @@ const cryptoCurrencyNames: { [name: string]: string } = {
   ETH: "ethereum",
 };
 
-export function getCurrenciesFromApi(referenceCurrencyName: string): currenciesDataState {
+// Returning a promise here because I don't want to actually dispatch the new rates until I have all the info
+export async function getCurrenciesFromApi(
+  referenceCurrencyName: string
+): Promise<currenciesDataState> {
   let newRates: currenciesDataState = { currencies: {} };
-  if (referenceCurrencyName == "BTC") {
-  } else {
-    let currencyRates = getCurrencyFromAPI(referenceCurrencyName);
-    currencyRates.then((rates) => {
-      newRates.currencies = rates.rates;
-    });
-    let cryptoRates = getCryptoCurrenciesFromAPI(referenceCurrencyName);
-    cryptoRates
-      .then((rates) => {
-        newRates.currencies["BTC"] = rates.bitcoin.usd;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+
+  let currencyRates = await getCurrencyFromAPI(referenceCurrencyName);
+  newRates.currencies = currencyRates.rates;
+
+  let cryptoRates = await getCryptoCurrenciesFromAPI(referenceCurrencyName);
+  newRates.currencies = { ...newRates.currencies, ["BTC"]: cryptoRates.bitcoin.usd };
+
   return newRates;
 }
 
