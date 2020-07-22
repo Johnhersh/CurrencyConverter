@@ -23,7 +23,7 @@ export async function getCurrenciesFromApi(
 
   newRates.currencies = {
     ...newRates.currencies,
-    ["BTC"]: cryptoRates.bitcoin[referenceCurrencyName.toLowerCase()],
+    ["BTC"]: cryptoRates.bitcoin[referenceCurrencyName.toLowerCase()], // The cryptocurrency API sends the currencies in lower-case unfortunately
   };
 
   return newRates;
