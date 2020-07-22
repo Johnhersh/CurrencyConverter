@@ -17,9 +17,13 @@ export function getCurrenciesFromApi(referenceCurrencyName: string): currenciesD
       newRates.currencies = rates.rates;
     });
     let cryptoRates = getCryptoCurrenciesFromAPI(referenceCurrencyName);
-    cryptoRates.then((rates) => {
-      newRates.currencies["BTC"] = rates.bitcoin.usd;
-    });
+    cryptoRates
+      .then((rates) => {
+        newRates.currencies["BTC"] = rates.bitcoin.usd;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
   return newRates;
 }
