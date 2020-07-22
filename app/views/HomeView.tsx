@@ -5,7 +5,7 @@ import { connect, ConnectedProps, useStore } from "react-redux";
 
 import { RootState } from "../redux/rootReducer";
 
-import { getCurrencyFromApi } from "../fetchCurrencies";
+import { getCurrenciesFromApi } from "../fetchCurrencies";
 import CurrencyCard from "../components/CurrencyCard";
 import ReferenceCurrencyCard from "../components/ReferenceCurrencyCard";
 
@@ -23,7 +23,7 @@ const HomeView = (props: Props) => {
   const store = useStore();
 
   useEffect(() => {
-    getCurrencyFromApi(props.referenceCurrencyState.referenceName).then((rates) => {
+    getCurrenciesFromApi(props.referenceCurrencyState.referenceName).then((rates) => {
       store.dispatch({
         type: "UPDATE_CURRENCIES",
         payload: { currencies: rates.rates },
