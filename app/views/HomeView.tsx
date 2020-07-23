@@ -5,7 +5,7 @@ import { connect, ConnectedProps, useStore } from "react-redux";
 
 import { RootState } from "../redux/rootReducer";
 
-import { getCurrenciesFromApi } from "../fetchCurrencies";
+import { getCurrenciesFromApi, getCryptoCurrenciesFromApi } from "../fetchCurrencies";
 import CurrencyCard from "../components/CurrencyCard";
 import ReferenceCurrencyCard from "../components/ReferenceCurrencyCard";
 
@@ -23,13 +23,25 @@ const HomeView = (props: Props) => {
   const store = useStore();
 
   useEffect(() => {
-    // Using a .then because we have to wait to dispatch until all the values are propagated
-    getCurrenciesFromApi(props.referenceCurrencyState.referenceName).then((newRates) => {
-      store.dispatch({
-        type: "UPDATE_CURRENCIES",
-        payload: newRates,
+    if (["BTC", "ETH"].includes(props.referenceCurrencyState.referenceName)) {
+      getCryptoCurrenciesFromApi(
+        props.currencyList.currencies,
+        props.referenceCurrencyState.referenceName
+      ).then((newRates) => {
+        store.dispatch({
+          type: "UPDATE_CURRENCIES",
+          payload: newRates,
+        });
       });
-    });
+    } else {
+      // Using a .then because we have to wait to dispatch until all the values are propagated
+      getCurrenciesFromApi(props.referenceCurrencyState.referenceName).then((newRates) => {
+        store.dispatch({
+          type: "UPDATE_CURRENCIES",
+          payload: newRates,
+        });
+      });
+    }
   }, [props.referenceCurrencyState.referenceName]);
 
   return (

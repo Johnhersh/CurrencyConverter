@@ -15,6 +15,7 @@ const currencyIcons: { [name: string]: any } = {
   SEK: require("../../assets/CurrencyIcons/SEK.png"),
   CAD: require("../../assets/CurrencyIcons/CAD.png"),
   BTC: require("../../assets/CurrencyIcons/BTC.png"),
+  ETH: require("../../assets/CurrencyIcons/ETH.png"),
 };
 
 interface PropsBuiltIn {
