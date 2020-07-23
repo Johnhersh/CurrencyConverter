@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
-import { TextInput, StyleSheet, Text, View, TouchableWithoutFeedback } from "react-native";
+import { TextInput, StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { connect, ConnectedProps, useStore } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 
@@ -30,7 +31,12 @@ const ReferenceCurrencyCard = ({ referenceCurrencyState }: Props) => {
         textInput.current?.focus();
       }}
     >
-      <View style={styles.container}>
+      <LinearGradient
+        style={styles.container}
+        colors={["#4E91FF", "#00B4FF"]}
+        start={[0.5, 1]}
+        end={[0.5, 0]}
+      >
         <Text>{referenceCurrencyState.referenceCurrencySymbol + " "}</Text>
         <TextInput
           value={textValue}
@@ -40,7 +46,7 @@ const ReferenceCurrencyCard = ({ referenceCurrencyState }: Props) => {
           onChangeText={(text) => onChangeText(text)}
         />
         <Text>{" " + referenceCurrencyState.referenceName}</Text>
-      </View>
+      </LinearGradient>
     </TouchableWithoutFeedback>
   );
 };
@@ -69,10 +75,12 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     borderRadius: 7,
     borderWidth: 1,
-    borderColor: "#adadad",
+    borderColor: "#4E91FF",
     backgroundColor: "lightblue",
   },
   textInputStyle: {
     flex: -1,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
