@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
     maxHeight: 70,
     marginHorizontal: 2,
     marginVertical: 5,
+    paddingVertical: 10,
     borderRadius: 7,
     borderWidth: 1,
     borderColor: "#adadad",

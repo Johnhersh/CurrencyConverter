@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 
@@ -11,9 +11,11 @@ const ManageCurrenciesView = (props: Props) => {
   return (
     <View style={styles.container}>
       <CurrencyStatusBar style="dark" />
-      {Object.keys(currencyNames).map((currency, index) => {
-        return <AddRemoveCurrencyCard key={index} currencyName={currency} />;
-      })}
+      <ScrollView style={styles.cardsContainer}>
+        {Object.keys(currencyNames).map((currency, index) => {
+          return <AddRemoveCurrencyCard key={index} currencyName={currency} />;
+        })}
+      </ScrollView>
     </View>
   );
 };
@@ -37,5 +39,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  cardsContainer: {
+    flex: 1,
+    width: "80%",
   },
 });

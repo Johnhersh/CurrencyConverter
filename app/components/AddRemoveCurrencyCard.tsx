@@ -26,9 +26,9 @@ const AddRemoveCurrencyCard = ({ currencyName = "USD" }: PropsBuiltIn) => {
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <View style={styles.currencyContainer}>
         <Image source={currencyIcons[currencyName]} style={styles.imageContainer} />
+        <View style={{ flex: 1 }} />
         <View style={styles.currencyLongNameContainer}>
           <Text style={{ fontSize: 20 }}>{currencyName}</Text>
-          <View style={{ flex: 1 }} />
           <Text>{currencyNames[currencyName]}</Text>
         </View>
       </View>
@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
     maxHeight: 70,
     marginHorizontal: 2,
     marginVertical: 5,
+    paddingVertical: 10,
     borderRadius: 7,
     borderWidth: 1,
     borderColor: "#adadad",
@@ -65,8 +66,10 @@ const styles = StyleSheet.create({
     backgroundColor: "blue",
   },
   currencyLongNameContainer: {
+    display: "flex",
     flex: 1,
     justifyContent: "center",
-    paddingLeft: 10,
+    alignItems: "flex-end",
+    paddingRight: 10,
   },
 });
