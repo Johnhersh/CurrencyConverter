@@ -1,14 +1,19 @@
 import React from "react";
-import { StyleSheet, View, Text } from "react-native";
-
-import { connect, ConnectedProps, useStore } from "react-redux";
-
+import { StyleSheet, View } from "react-native";
+import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "../redux/rootReducer";
+
+import AddRemoveCurrencyCard from "../components/AddRemoveCurrencyCard";
+import CurrencyStatusBar from "../components/CurrencyStatusBar";
+import { currencyNames } from "../currencyDefinitions";
 
 const ManageCurrenciesView = (props: Props) => {
   return (
     <View style={styles.container}>
-      <Text>Manage Currencies View</Text>
+      <CurrencyStatusBar style="dark" />
+      {Object.keys(currencyNames).map((currency, index) => {
+        return <AddRemoveCurrencyCard key={index} currencyName={currency} />;
+      })}
     </View>
   );
 };

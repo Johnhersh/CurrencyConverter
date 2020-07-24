@@ -6,7 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import HomeView from "./app/views/HomeView";
-import ManageCurrenciesView from "./app/views/manageCurrenciesView";
+import ManageCurrenciesView from "./app/views/ManageCurrenciesView";
 
 import store from "./app/redux/store";
 
