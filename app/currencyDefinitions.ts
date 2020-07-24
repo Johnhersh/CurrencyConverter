@@ -10,6 +10,7 @@ export const currencySymbols: { [name: string]: string } = {
   USD: "$",
   AUD: "A$",
   ILS: "₪",
+  RUB: "₽",
   BTC: "BTC",
   ETH: "ETH",
 };
@@ -26,6 +27,7 @@ export const currencyNames: { [name: string]: string } = {
   USD: "US Dollar",
   AUD: "Australian Dollar",
   ILS: "Israeli Shekel",
+  RUB: "Russian Ruble",
   BTC: "Bitcoin",
   ETH: "Ethereum",
 };
