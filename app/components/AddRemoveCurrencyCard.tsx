@@ -1,19 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
-import { currencyNames } from "../currencyDefinitions";
-
-const currencyIcons: { [name: string]: any } = {
-  USD: require("../../assets/CurrencyIcons/USD.png"),
-  EUR: require("../../assets/CurrencyIcons/EUR.png"),
-  GBP: require("../../assets/CurrencyIcons/GBP.png"),
-  JPY: require("../../assets/CurrencyIcons/JPY.png"),
-  DKK: require("../../assets/CurrencyIcons/DKK.png"),
-  SEK: require("../../assets/CurrencyIcons/SEK.png"),
-  CAD: require("../../assets/CurrencyIcons/CAD.png"),
-  BTC: require("../../assets/CurrencyIcons/BTC.png"),
-  ETH: require("../../assets/CurrencyIcons/ETH.png"),
-};
+import { currencyNames, currencyIcons } from "../currencyDefinitions";
 
 interface PropsBuiltIn {
   currencyName: string;
