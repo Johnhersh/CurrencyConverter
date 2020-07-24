@@ -3,12 +3,12 @@
 
 import { combineReducers } from "redux";
 
-import { currencyReducer, referenceCurrencyReducer } from "./currencyReducer";
-import { currencyListReducer } from "./currencyListReducer";
+import { currencyDataReducer, referenceCurrencyReducer } from "./currencyReducer";
+import { activeCurrenciesListReducer } from "./currencyListReducer";
 
 export const rootReducers = combineReducers({
-  currencyList: currencyListReducer,
-  currenciesState: currencyReducer,
+  currencyList: activeCurrenciesListReducer,
+  currenciesDataState: currencyDataReducer,
   referenceCurrencyState: referenceCurrencyReducer,
 });
 

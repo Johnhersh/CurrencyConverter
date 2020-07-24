@@ -5,7 +5,7 @@ export const ADD_TO_CURRENCY_LIST = "ADD_TO_CURRENCY_LIST";
 export const REMOVE_FROM_CURRENCY_LIST = "REMOVE_FROM_CURRENCY_LIST";
 
 // Currency List:
-export interface currencyListState {
+export interface activeCurrenciesListState {
   currencies: string[];
 }
 

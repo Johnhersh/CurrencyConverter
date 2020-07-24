@@ -1,13 +1,13 @@
-import { currencyListState, CurrencyListActionTypes } from "./types";
+import { activeCurrenciesListState, CurrencyListActionTypes } from "./types";
 
-const INITIAL_LIST_STATE: currencyListState = {
+const INITIAL_LIST_STATE: activeCurrenciesListState = {
   currencies: ["GBP", "EUR", "JPY", "DKK", "CAD", "SEK", "BTC", "ETH"],
 };
 
-export const currencyListReducer = (
+export const activeCurrenciesListReducer = (
   state = INITIAL_LIST_STATE,
   action: CurrencyListActionTypes
-): currencyListState => {
+): activeCurrenciesListState => {
   switch (action.type) {
     case "ADD_TO_CURRENCY_LIST":
       return {

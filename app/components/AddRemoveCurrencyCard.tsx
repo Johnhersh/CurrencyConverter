@@ -1,14 +1,16 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { connect, ConnectedProps, useStore } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 
+import { RootState } from "../redux/rootReducer";
 import { currencyNames, currencyIcons } from "../currencyDefinitions";
 
 interface PropsBuiltIn {
   currencyName: string;
 }
 
-const AddRemoveCurrencyCard = ({ currencyName = "USD" }: PropsBuiltIn) => {
+const AddRemoveCurrencyCard = ({ currencyName = "USD", currencyList }: Props) => {
   function onPress() {}
 
   const colorsOn = ["#4E91FF", "#00B4FF"];
@@ -33,7 +35,17 @@ const AddRemoveCurrencyCard = ({ currencyName = "USD" }: PropsBuiltIn) => {
   );
 };
 
-export default AddRemoveCurrencyCard;
+function mapStateToProps(state: RootState): RootState {
+  return {
+    ...state,
+  };
+}
+
+const connector = connect(mapStateToProps);
+type PropsFromRedux = ConnectedProps<typeof connector>;
+type Props = PropsFromRedux & PropsBuiltIn;
+
+export default connector(AddRemoveCurrencyCard);
 
 const styles = StyleSheet.create({
   container: {

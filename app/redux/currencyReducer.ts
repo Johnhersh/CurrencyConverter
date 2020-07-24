@@ -9,7 +9,7 @@ const INITIAL_STATE: currenciesDataState = {
   currencies: { EUR: 100, GBP: 100 },
 };
 
-export const currencyReducer = (
+export const currencyDataReducer = (
   state = INITIAL_STATE,
   action: CurrencyActionTypes
 ): currenciesDataState => {

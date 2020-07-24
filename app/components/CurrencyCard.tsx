@@ -10,15 +10,19 @@ interface PropsBuiltIn {
   currencyName: string;
 }
 
-const CurrencyCard = ({ currencyName = "USD", currenciesState, referenceCurrencyState }: Props) => {
+const CurrencyCard = ({
+  currencyName = "USD",
+  currenciesDataState,
+  referenceCurrencyState,
+}: Props) => {
   const store = useStore();
   const currencySymbol = currencySymbols[currencyName];
 
   // Doing this because currencyValue will be undefined until the values get propagated into the state:
   let currencyValue = "";
-  if (currenciesState.currencies[currencyName]) {
+  if (currenciesDataState.currencies[currencyName]) {
     currencyValue = (
-      currenciesState.currencies[currencyName] * referenceCurrencyState.referenceMultiplier
+      currenciesDataState.currencies[currencyName] * referenceCurrencyState.referenceMultiplier
     ).toFixed(3);
   }
   const valueFontSize = 18 - referenceCurrencyState.referenceMultiplier.toString().length * 0.5; // I want the text to shrink slightly with the amount of digits
