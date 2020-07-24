@@ -21,7 +21,7 @@ const CurrencyCard = ({ currencyName = "USD", currenciesState, referenceCurrency
       currenciesState.currencies[currencyName] * referenceCurrencyState.referenceMultiplier
     ).toFixed(3);
   }
-  const valueFontSize = 18 - referenceCurrencyState.referenceMultiplier.toString().length; // I want the text to shrink slightly with the amount of digits
+  const valueFontSize = 18 - referenceCurrencyState.referenceMultiplier.toString().length * 0.5; // I want the text to shrink slightly with the amount of digits
 
   function onPress() {
     store.dispatch({
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   currencyContainer: {
     display: "flex",
     flexDirection: "row",
-    flex: 2,
+    flex: 1,
     paddingLeft: 10,
   },
   imageContainer: {
