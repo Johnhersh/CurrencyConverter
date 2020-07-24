@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { connect, ConnectedProps, useStore } from "react-redux";
 import { RootState } from "../redux/rootReducer";
 
-import { currencySymbols, currencyNames } from "../redux/types";
+import { currencySymbols, currencyNames } from "../currencyDefinitions";
 
 const currencyIcons: { [name: string]: any } = {
   USD: require("../../assets/CurrencyIcons/USD.png"),
