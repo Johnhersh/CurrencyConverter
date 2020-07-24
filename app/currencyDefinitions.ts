@@ -29,3 +29,8 @@ export const currencyNames: { [name: string]: string } = {
   BTC: "Bitcoin",
   ETH: "Ethereum",
 };
+
+export const cryptoCurrencyNames: { [name: string]: string } = {
+  BTC: "bitcoin",
+  ETH: "ethereum",
+};

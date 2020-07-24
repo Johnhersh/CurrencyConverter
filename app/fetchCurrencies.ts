@@ -1,12 +1,8 @@
 import { currenciesDataState } from "./redux/types";
+import { cryptoCurrencyNames } from "./currencyDefinitions";
 
 const currencyURL = "https://api.exchangeratesapi.io/latest?base=";
 const cryptoCurrencyURL = "https://api.coingecko.com/api/v3/simple/price?ids=";
-
-const cryptoCurrencyNames: { [name: string]: string } = {
-  BTC: "bitcoin",
-  ETH: "ethereum",
-};
 
 export async function getCurrenciesFromApi( // Returning a promise here because I don't want to actually dispatch the new rates until I have all the info
   referenceCurrencyName: string
