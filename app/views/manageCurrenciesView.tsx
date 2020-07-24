@@ -11,10 +11,12 @@ const ManageCurrenciesView = (props: Props) => {
   return (
     <View style={styles.container}>
       <CurrencyStatusBar style="dark" />
-      <ScrollView style={styles.cardsContainer}>
-        {Object.keys(currencyNames).map((currency, index) => {
-          return <AddRemoveCurrencyCard key={index} currencyName={currency} />;
-        })}
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.cardsContainer}>
+          {Object.keys(currencyNames).map((currency, index) => {
+            return <AddRemoveCurrencyCard key={index} currencyName={currency} />;
+          })}
+        </View>
       </ScrollView>
     </View>
   );
@@ -43,5 +45,10 @@ const styles = StyleSheet.create({
   cardsContainer: {
     flex: 1,
     width: "80%",
+    alignSelf: "center",
+  },
+  scrollView: {
+    flex: 1,
+    width: "100%",
   },
 });
