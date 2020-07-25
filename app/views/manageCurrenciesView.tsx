@@ -1,13 +1,11 @@
 import React from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
-import { connect, ConnectedProps } from "react-redux";
-import { RootState } from "../redux/rootReducer";
 
 import AddRemoveCurrencyCard from "../components/AddRemoveCurrencyCard";
 import CurrencyStatusBar from "../components/CurrencyStatusBar";
 import { currencyNames } from "../currencyDefinitions";
 
-const ManageCurrenciesView = (props: Props) => {
+const ManageCurrenciesView = () => {
   return (
     <View style={styles.container}>
       <CurrencyStatusBar style="dark" />
@@ -22,16 +20,7 @@ const ManageCurrenciesView = (props: Props) => {
   );
 };
 
-function mapStateToProps(state: RootState): RootState {
-  return {
-    ...state,
-  };
-}
-
-const connector = connect(mapStateToProps);
-type Props = ConnectedProps<typeof connector>;
-
-export default connector(ManageCurrenciesView);
+export default ManageCurrenciesView;
 
 const styles = StyleSheet.create({
   container: {
