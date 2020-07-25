@@ -12,9 +12,19 @@ interface PropsBuiltIn {
 
 const AddRemoveCurrencyCard = ({ currencyName = "USD", activeCurrenciesList }: Props) => {
   const bIsActive = activeCurrenciesList.currencies.includes(currencyName);
+  const store = useStore();
 
   function onPress() {
     if (bIsActive) {
+      store.dispatch({
+        type: "REMOVE_FROM_CURRENCY_LIST",
+        payload: currencyName,
+      });
+    } else {
+      store.dispatch({
+        type: "ADD_TO_CURRENCY_LIST",
+        payload: currencyName,
+      });
     }
   }
 
