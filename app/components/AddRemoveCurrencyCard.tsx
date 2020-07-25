@@ -15,11 +15,7 @@ const AddRemoveCurrencyCard = ({ currencyName = "USD", activeCurrenciesList }: P
 
   const colorsOn = ["#4E91FF", "#00B4FF"];
   const colorsOff = ["#FFFFFF", "#EEEEEE"];
-  let colors = ["#FFF", "#FFF"];
-
-  if (activeCurrenciesList.currencies.includes(currencyName)) {
-    colors = colorsOn;
-  } else colors = colorsOff;
+  let colors = activeCurrenciesList.currencies.includes(currencyName) ? colorsOn : colorsOff;
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
