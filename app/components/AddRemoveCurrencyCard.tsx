@@ -11,11 +11,16 @@ interface PropsBuiltIn {
 }
 
 const AddRemoveCurrencyCard = ({ currencyName = "USD", activeCurrenciesList }: Props) => {
-  function onPress() {}
+  const bIsActive = activeCurrenciesList.currencies.includes(currencyName);
+
+  function onPress() {
+    if (bIsActive) {
+    }
+  }
 
   const colorsOn = ["#4E91FF", "#00B4FF"];
   const colorsOff = ["#FFFFFF", "#EEEEEE"];
-  let colors = activeCurrenciesList.currencies.includes(currencyName) ? colorsOn : colorsOff;
+  const colors = bIsActive ? colorsOn : colorsOff;
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>

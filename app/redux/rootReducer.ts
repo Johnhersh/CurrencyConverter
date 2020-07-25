@@ -4,7 +4,7 @@
 import { combineReducers } from "redux";
 
 import { currencyDataReducer, referenceCurrencyReducer } from "./currencyReducer";
-import { activeCurrenciesListReducer } from "./currencyListReducer";
+import { activeCurrenciesListReducer } from "./activeCurrenciesListReducer";
 
 export const rootReducers = combineReducers({
   activeCurrenciesList: activeCurrenciesListReducer,
