@@ -5,6 +5,9 @@ import {
   CurrencyActionTypes,
   UPDATE_CURRENCIES,
   currenciesDataState,
+  ReferenceActionType,
+  referenceCurrency,
+  UPDATE_REFERENCE,
 } from "./types";
 
 // Active currency list actions:
@@ -27,5 +30,15 @@ export function UpdateCurrencies(newCurrenciesData: currenciesDataState): Curren
   return {
     type: UPDATE_CURRENCIES,
     payload: newCurrenciesData,
+  };
+}
+
+// Reference Currency:
+export function UpdateReferenceCurrency(
+  newReferenceCurrency: referenceCurrency
+): ReferenceActionType {
+  return {
+    type: UPDATE_REFERENCE,
+    payload: newReferenceCurrency,
   };
 }

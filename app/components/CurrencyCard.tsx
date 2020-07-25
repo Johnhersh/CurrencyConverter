@@ -1,8 +1,13 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 
-import { connect, ConnectedProps, useStore } from "react-redux";
+import { connect, ConnectedProps, useDispatch } from "react-redux";
 import { RootState } from "../redux/rootReducer";
+import {
+  AddToCurrencyList,
+  RemoveFromCurrencyList,
+  UpdateReferenceCurrency,
+} from "../redux/actions";
 
 import { currencySymbols, currencyNames, currencyIcons } from "../currencyDefinitions";
 
@@ -15,8 +20,8 @@ const CurrencyCard = ({
   currenciesDataState,
   referenceCurrencyState,
 }: Props) => {
-  const store = useStore();
   const currencySymbol = currencySymbols[currencyName];
+  const dispatch = useDispatch();
 
   // Doing this because currencyValue will be undefined until the values get propagated into the state:
   let currencyValue = "";
@@ -28,22 +33,15 @@ const CurrencyCard = ({
   const valueFontSize = 18 - referenceCurrencyState.referenceMultiplier.toString().length * 0.5; // I want the text to shrink slightly with the amount of digits
 
   function onPress() {
-    store.dispatch({
-      type: "ADD_TO_CURRENCY_LIST",
-      payload: referenceCurrencyState.referenceName,
-    });
-    store.dispatch({
-      type: "REMOVE_FROM_CURRENCY_LIST",
-      payload: currencyName,
-    });
-    store.dispatch({
-      type: "UPDATE_REFERENCE_CURRENCY",
-      payload: {
+    dispatch(AddToCurrencyList(referenceCurrencyState.referenceName));
+    dispatch(RemoveFromCurrencyList(currencyName));
+    dispatch(
+      UpdateReferenceCurrency({
         referenceCurrencySymbol: currencySymbol,
         referenceName: currencyName,
-        referenceMultiplier: currencyValue,
-      },
-    });
+        referenceMultiplier: parseFloat(currencyValue),
+      })
+    );
   }
 
   return (
