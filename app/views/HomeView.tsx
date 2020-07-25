@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { StyleSheet, View, Keyboard, TouchableWithoutFeedback } from "react-native";
-import { connect, ConnectedProps, useStore } from "react-redux";
+import { connect, ConnectedProps, useDispatch } from "react-redux";
 
 import { RootState } from "../redux/rootReducer";
+import { UpdateCurrencies } from "../redux/actions";
 
 import { getCurrenciesFromApi, getCryptoCurrenciesFromApi } from "../fetchCurrencies";
 import CurrencyStatusBar from "../components/CurrencyStatusBar";
@@ -10,7 +11,7 @@ import CurrencyCard from "../components/CurrencyCard";
 import ReferenceCurrencyCard from "../components/ReferenceCurrencyCard";
 
 const HomeView = (props: Props) => {
-  const store = useStore();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (["BTC", "ETH"].includes(props.referenceCurrencyState.referenceName)) {
@@ -18,18 +19,12 @@ const HomeView = (props: Props) => {
         props.activeCurrenciesList.currencies,
         props.referenceCurrencyState.referenceName
       ).then((newRates) => {
-        store.dispatch({
-          type: "UPDATE_CURRENCIES",
-          payload: newRates,
-        });
+        dispatch(UpdateCurrencies(newRates));
       });
     } else {
       // Using a .then because we have to wait to dispatch until all the values are propagated
       getCurrenciesFromApi(props.referenceCurrencyState.referenceName).then((newRates) => {
-        store.dispatch({
-          type: "UPDATE_CURRENCIES",
-          payload: newRates,
-        });
+        dispatch(UpdateCurrencies(newRates));
       });
     }
   }, [props.referenceCurrencyState.referenceName]);

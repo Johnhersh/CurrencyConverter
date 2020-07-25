@@ -1,10 +1,11 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
-import { connect, ConnectedProps, useStore } from "react-redux";
+import { connect, ConnectedProps, useDispatch } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { RootState } from "../redux/rootReducer";
 import { currencyNames, currencyIcons } from "../currencyDefinitions";
+import { AddToCurrencyList, RemoveFromCurrencyList } from "../redux/actions";
 
 interface PropsBuiltIn {
   currencyName: string;
@@ -12,19 +13,13 @@ interface PropsBuiltIn {
 
 const AddRemoveCurrencyCard = ({ currencyName = "USD", activeCurrenciesList }: Props) => {
   const bIsActive = activeCurrenciesList.currencies.includes(currencyName);
-  const store = useStore();
+  const dispatch = useDispatch();
 
   function onPress() {
     if (bIsActive) {
-      store.dispatch({
-        type: "REMOVE_FROM_CURRENCY_LIST",
-        payload: currencyName,
-      });
+      dispatch(RemoveFromCurrencyList(currencyName));
     } else {
-      store.dispatch({
-        type: "ADD_TO_CURRENCY_LIST",
-        payload: currencyName,
-      });
+      dispatch(AddToCurrencyList(currencyName));
     }
   }
 
