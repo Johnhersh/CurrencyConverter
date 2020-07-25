@@ -10,17 +10,22 @@ interface PropsBuiltIn {
   currencyName: string;
 }
 
-const AddRemoveCurrencyCard = ({ currencyName = "USD", currencyList }: Props) => {
+const AddRemoveCurrencyCard = ({ currencyName = "USD", activeCurrenciesList }: Props) => {
   function onPress() {}
 
   const colorsOn = ["#4E91FF", "#00B4FF"];
   const colorsOff = ["#FFFFFF", "#EEEEEE"];
+  let colors = ["#FFF", "#FFF"];
+
+  if (activeCurrenciesList.currencies.includes(currencyName)) {
+    colors = colorsOn;
+  } else colors = colorsOff;
 
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <LinearGradient
         style={styles.gradientContainer}
-        colors={colorsOff}
+        colors={colors}
         start={[0.5, 1]}
         end={[0.5, 0]}
       >
