@@ -15,7 +15,7 @@ const HomeView = (props: Props) => {
   useEffect(() => {
     if (["BTC", "ETH"].includes(props.referenceCurrencyState.referenceName)) {
       getCryptoCurrenciesFromApi(
-        props.currencyList.currencies,
+        props.activeCurrenciesList.currencies,
         props.referenceCurrencyState.referenceName
       ).then((newRates) => {
         store.dispatch({
@@ -40,7 +40,7 @@ const HomeView = (props: Props) => {
         <CurrencyStatusBar style="dark" />
         <View style={styles.cardsContainer}>
           <ReferenceCurrencyCard />
-          {props.currencyList.currencies.map((currency) => {
+          {props.activeCurrenciesList.currencies.map((currency) => {
             return <CurrencyCard key={currency} currencyName={currency} />;
           })}
         </View>

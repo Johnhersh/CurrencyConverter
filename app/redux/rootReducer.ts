@@ -7,7 +7,7 @@ import { currencyDataReducer, referenceCurrencyReducer } from "./currencyReducer
 import { activeCurrenciesListReducer } from "./currencyListReducer";
 
 export const rootReducers = combineReducers({
-  currencyList: activeCurrenciesListReducer,
+  activeCurrenciesList: activeCurrenciesListReducer,
   currenciesDataState: currencyDataReducer,
   referenceCurrencyState: referenceCurrencyReducer,
 });
