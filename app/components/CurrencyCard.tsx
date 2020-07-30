@@ -1,7 +1,11 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { PanGestureHandler } from "react-native-gesture-handler";
+import {
+  PanGestureHandler,
+  PanGestureHandlerStateChangeEvent,
+  State,
+} from "react-native-gesture-handler";
 
 import { connect, ConnectedProps, useDispatch } from "react-redux";
 import { RootState } from "../redux/rootReducer";
@@ -54,13 +58,21 @@ const CurrencyCard = ({
     useNativeDriver: true,
   });
 
+  let width = new Animated.Value(1);
+  function handleGestureStateChange(event: PanGestureHandlerStateChangeEvent) {
+    if (event.nativeEvent.state == State.ACTIVE) {
+      width.setValue(1.01);
+    }
+    if (event.nativeEvent.state == State.END) {
+      width.setValue(1);
+    }
+  }
+
   return (
-    <Animated.View style={[styles.container, { transform: [{ translateY: translateY }] }]}>
-      <TouchableOpacity
-        // style={{ transform: [{ translateY: 75 + 75 * listIndex }] }}
-        style={styles.touchable}
-        onPress={onPress}
-      >
+    <Animated.View
+      style={[styles.container, { transform: [{ translateY: translateY }, { scaleX: width }] }]}
+    >
+      <TouchableOpacity style={styles.touchable} onPress={onPress}>
         <View style={styles.currencyContainer}>
           <Image source={currencyIcons[currencyName]} style={styles.imageContainer} />
           <View style={styles.currencyLongNameContainer}>
@@ -72,7 +84,10 @@ const CurrencyCard = ({
           <Text style={{ fontSize: valueFontSize }}>{currencySymbol + " " + currencyValue}</Text>
         </View>
       </TouchableOpacity>
-      <PanGestureHandler onGestureEvent={handleGesture}>
+      <PanGestureHandler
+        onGestureEvent={handleGesture}
+        onHandlerStateChange={handleGestureStateChange}
+      >
         <Animated.View style={styles.gripContainer}>
           <FontAwesome5 name="grip-vertical" size={24} color="black" />
         </Animated.View>
@@ -100,9 +115,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: 300,
-    width: "100%",
+    width: "95%",
     maxHeight: 70,
-    marginHorizontal: 2,
     marginVertical: 5,
     borderRadius: 7,
     borderWidth: 1,

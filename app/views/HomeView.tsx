@@ -66,5 +66,6 @@ const styles = StyleSheet.create({
   cardsContainer: {
     flex: 1,
     width: "80%",
+    alignItems: "center",
   },
 });
