@@ -61,7 +61,7 @@ const CurrencyCard = ({
   let width = new Animated.Value(1);
   function handleGestureStateChange(event: PanGestureHandlerStateChangeEvent) {
     if (event.nativeEvent.state == State.ACTIVE) {
-      width.setValue(1.01);
+      Animated.timing(width, { duration: 200, toValue: 1.02, useNativeDriver: true }).start();
     }
     if (event.nativeEvent.state == State.END) {
       width.setValue(1);
