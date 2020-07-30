@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from "react-native";
+import { FontAwesome5 } from "@expo/vector-icons";
 import { PanGestureHandler } from "react-native-gesture-handler";
 
 import { connect, ConnectedProps, useDispatch } from "react-redux";
@@ -49,31 +50,36 @@ const CurrencyCard = ({
 
   let translateX = new Animated.Value(0);
   let translateY = new Animated.Value(0);
+  translateY.setOffset(75 + 75 * listIndex);
   let handleGesture = Animated.event(
     [{ nativeEvent: { translationX: translateX, translationY: translateY } }],
     { useNativeDriver: true }
   );
 
   return (
-    <PanGestureHandler onGestureEvent={handleGesture}>
-      <Animated.View style={{ transform: [{ translateY: translateY }] }}>
-        <TouchableOpacity
-          style={[styles.container, { transform: [{ translateY: 75 + 75 * listIndex }] }]}
-          onPress={onPress}
-        >
-          <View style={styles.currencyContainer}>
-            <Image source={currencyIcons[currencyName]} style={styles.imageContainer} />
-            <View style={styles.currencyLongNameContainer}>
-              <Text style={{ fontSize: 20 }}>{currencyName}</Text>
-              <Text>{currencyNames[currencyName]}</Text>
-            </View>
+    <Animated.View style={[styles.container, { transform: [{ translateY: translateY }] }]}>
+      <TouchableOpacity
+        // style={{ transform: [{ translateY: 75 + 75 * listIndex }] }}
+        style={styles.touchable}
+        onPress={onPress}
+      >
+        <View style={styles.currencyContainer}>
+          <Image source={currencyIcons[currencyName]} style={styles.imageContainer} />
+          <View style={styles.currencyLongNameContainer}>
+            <Text style={{ fontSize: 20 }}>{currencyName}</Text>
+            <Text>{currencyNames[currencyName]}</Text>
           </View>
-          <View style={styles.valuesContainer}>
-            <Text style={{ fontSize: valueFontSize }}>{currencySymbol + " " + currencyValue}</Text>
-          </View>
-        </TouchableOpacity>
-      </Animated.View>
-    </PanGestureHandler>
+        </View>
+        <View style={styles.valuesContainer}>
+          <Text style={{ fontSize: valueFontSize }}>{currencySymbol + " " + currencyValue}</Text>
+        </View>
+      </TouchableOpacity>
+      <PanGestureHandler onGestureEvent={handleGesture}>
+        <View style={styles.gripContainer}>
+          <FontAwesome5 name="grip-vertical" size={24} color="black" />
+        </View>
+      </PanGestureHandler>
+    </Animated.View>
   );
 };
 
@@ -106,7 +112,12 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     borderWidth: 1,
     borderColor: "#adadad",
-    // backgroundColor: "red",
+    backgroundColor: "white",
+  },
+  touchable: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
   },
   currencyContainer: {
     display: "flex",
@@ -128,6 +139,9 @@ const styles = StyleSheet.create({
   valuesContainer: {
     flex: 1,
     alignItems: "flex-end",
+    paddingRight: 10,
+  },
+  gripContainer: {
     paddingRight: 10,
   },
 });
