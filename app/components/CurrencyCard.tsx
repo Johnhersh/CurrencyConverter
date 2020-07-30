@@ -48,13 +48,11 @@ const CurrencyCard = ({
     );
   }
 
-  let translateX = new Animated.Value(0);
   let translateY = new Animated.Value(0);
   translateY.setOffset(75 + 75 * listIndex);
-  let handleGesture = Animated.event(
-    [{ nativeEvent: { translationX: translateX, translationY: translateY } }],
-    { useNativeDriver: true }
-  );
+  let handleGesture = Animated.event([{ nativeEvent: { translationY: translateY } }], {
+    useNativeDriver: true,
+  });
 
   return (
     <Animated.View style={[styles.container, { transform: [{ translateY: translateY }] }]}>
@@ -75,9 +73,9 @@ const CurrencyCard = ({
         </View>
       </TouchableOpacity>
       <PanGestureHandler onGestureEvent={handleGesture}>
-        <View style={styles.gripContainer}>
+        <Animated.View style={styles.gripContainer}>
           <FontAwesome5 name="grip-vertical" size={24} color="black" />
-        </View>
+        </Animated.View>
       </PanGestureHandler>
     </Animated.View>
   );
@@ -98,8 +96,6 @@ export default connector(CurrencyCard);
 const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    // flex: 1,
-    // display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -108,7 +104,6 @@ const styles = StyleSheet.create({
     maxHeight: 70,
     marginHorizontal: 2,
     marginVertical: 5,
-    // paddingVertical: 10,
     borderRadius: 7,
     borderWidth: 1,
     borderColor: "#adadad",
