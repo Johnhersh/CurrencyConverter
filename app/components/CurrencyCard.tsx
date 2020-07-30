@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from "react-native";
+import { PanGestureHandler } from "react-native-gesture-handler";
 
 import { connect, ConnectedProps, useDispatch } from "react-redux";
 import { RootState } from "../redux/rootReducer";
@@ -13,10 +14,12 @@ import { currencySymbols, currencyNames, currencyIcons } from "../currencyDefini
 
 interface PropsBuiltIn {
   currencyName: string;
+  listIndex: number;
 }
 
 const CurrencyCard = ({
   currencyName = "USD",
+  listIndex,
   currenciesDataState,
   referenceCurrencyState,
 }: Props) => {
@@ -44,19 +47,33 @@ const CurrencyCard = ({
     );
   }
 
+  let translateX = new Animated.Value(0);
+  let translateY = new Animated.Value(0);
+  let handleGesture = Animated.event(
+    [{ nativeEvent: { translationX: translateX, translationY: translateY } }],
+    { useNativeDriver: true }
+  );
+
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
-      <View style={styles.currencyContainer}>
-        <Image source={currencyIcons[currencyName]} style={styles.imageContainer} />
-        <View style={styles.currencyLongNameContainer}>
-          <Text style={{ fontSize: 20 }}>{currencyName}</Text>
-          <Text>{currencyNames[currencyName]}</Text>
-        </View>
-      </View>
-      <View style={styles.valuesContainer}>
-        <Text style={{ fontSize: valueFontSize }}>{currencySymbol + " " + currencyValue}</Text>
-      </View>
-    </TouchableOpacity>
+    <PanGestureHandler onGestureEvent={handleGesture}>
+      <Animated.View style={{ transform: [{ translateY: translateY }] }}>
+        <TouchableOpacity
+          style={[styles.container, { transform: [{ translateY: 75 + 75 * listIndex }] }]}
+          onPress={onPress}
+        >
+          <View style={styles.currencyContainer}>
+            <Image source={currencyIcons[currencyName]} style={styles.imageContainer} />
+            <View style={styles.currencyLongNameContainer}>
+              <Text style={{ fontSize: 20 }}>{currencyName}</Text>
+              <Text>{currencyNames[currencyName]}</Text>
+            </View>
+          </View>
+          <View style={styles.valuesContainer}>
+            <Text style={{ fontSize: valueFontSize }}>{currencySymbol + " " + currencyValue}</Text>
+          </View>
+        </TouchableOpacity>
+      </Animated.View>
+    </PanGestureHandler>
   );
 };
 
@@ -74,18 +91,22 @@ export default connector(CurrencyCard);
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    display: "flex",
+    position: "absolute",
+    // flex: 1,
+    // display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
+    height: 300,
+    width: "100%",
     maxHeight: 70,
     marginHorizontal: 2,
     marginVertical: 5,
-    paddingVertical: 10,
+    // paddingVertical: 10,
     borderRadius: 7,
     borderWidth: 1,
     borderColor: "#adadad",
+    // backgroundColor: "red",
   },
   currencyContainer: {
     display: "flex",

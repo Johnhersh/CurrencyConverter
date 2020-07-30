@@ -35,8 +35,8 @@ const HomeView = (props: Props) => {
         <CurrencyStatusBar style="dark" />
         <View style={styles.cardsContainer}>
           <ReferenceCurrencyCard />
-          {props.activeCurrenciesList.currencies.map((currency) => {
-            return <CurrencyCard key={currency} currencyName={currency} />;
+          {props.activeCurrenciesList.currencies.map((currency, index) => {
+            return <CurrencyCard key={currency} currencyName={currency} listIndex={index} />;
           })}
         </View>
       </View>

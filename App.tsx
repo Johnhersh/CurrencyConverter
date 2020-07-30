@@ -16,7 +16,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Tab.Navigator initialRouteName="Manage">
+        <Tab.Navigator initialRouteName="Home">
           <Tab.Screen name="Home" component={HomeView} options={{ title: "Currency Converter" }} />
           <Tab.Screen
             name="Manage"
