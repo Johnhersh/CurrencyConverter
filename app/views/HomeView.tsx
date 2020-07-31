@@ -29,6 +29,10 @@ const HomeView = (props: Props) => {
     }
   }, [props.referenceCurrencyState.referenceName]);
 
+  function swapIndexes(from: number, to: number) {
+    console.log("Swapping: " + from + " with " + to);
+  }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
@@ -36,7 +40,14 @@ const HomeView = (props: Props) => {
         <View style={styles.cardsContainer}>
           <ReferenceCurrencyCard />
           {props.activeCurrenciesList.currencies.map((currency, index) => {
-            return <CurrencyCard key={currency} currencyName={currency} listIndex={index} />;
+            return (
+              <CurrencyCard
+                key={currency}
+                currencyName={currency}
+                listIndex={index}
+                swapFunction={swapIndexes}
+              />
+            );
           })}
         </View>
       </View>

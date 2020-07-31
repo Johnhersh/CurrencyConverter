@@ -4,6 +4,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import {
   PanGestureHandler,
   PanGestureHandlerStateChangeEvent,
+  PanGestureHandlerGestureEvent,
   State,
 } from "react-native-gesture-handler";
 
@@ -17,9 +18,11 @@ import {
 
 import { currencySymbols, currencyNames, currencyIcons } from "../currencyDefinitions";
 
+// Props interface *********************************
 interface PropsBuiltIn {
   currencyName: string;
   listIndex: number;
+  swapFunction: (from: number, to: number) => void;
 }
 
 const CurrencyCard = ({
@@ -27,6 +30,7 @@ const CurrencyCard = ({
   listIndex,
   currenciesDataState,
   referenceCurrencyState,
+  swapFunction,
 }: Props) => {
   const currencySymbol = currencySymbols[currencyName];
   const dispatch = useDispatch();
@@ -52,11 +56,23 @@ const CurrencyCard = ({
     );
   }
 
+  let indexOffset = 0;
   let translateY = new Animated.Value(0);
   translateY.setOffset(75 + 75 * listIndex);
-  let handleGesture = Animated.event([{ nativeEvent: { translationY: translateY } }], {
-    useNativeDriver: true,
-  });
+  function handleGesture(event: PanGestureHandlerGestureEvent) {
+    let translationY = event.nativeEvent.translationY;
+    Animated.timing(translateY, {
+      duration: 0,
+      toValue: translationY,
+      useNativeDriver: true,
+    }).start();
+
+    translationY = Math.round(translationY / 75);
+    if (Math.round(indexOffset) != translationY) {
+      swapFunction(listIndex, translationY);
+      indexOffset = translationY;
+    }
+  }
 
   let width = new Animated.Value(1);
   function handleGestureStateChange(event: PanGestureHandlerStateChangeEvent) {
