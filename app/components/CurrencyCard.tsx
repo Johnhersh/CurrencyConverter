@@ -181,6 +181,8 @@ const styles = StyleSheet.create({
   currencyContainer: {
     display: "flex",
     flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
     flex: 1,
     paddingLeft: 10,
   },
