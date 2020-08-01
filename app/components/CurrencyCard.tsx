@@ -82,7 +82,7 @@ const CurrencyCard = ({
     }).start();
 
     translationY = Math.round(translationY / 75); // How many slots away we've gone since picked up
-    if (Math.round(indexOffset.current) != translationY) {
+    if (indexOffset.current != translationY) {
       indexOffset.current = translationY;
       dispatch(
         SwapInCurrencyList({
