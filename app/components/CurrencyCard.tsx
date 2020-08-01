@@ -55,7 +55,6 @@ const CurrencyCard = ({
         useNativeDriver: true,
       }).start();
       displayIndex.current = listIndex;
-      console.log(`To ${displayIndex.current}`);
     }
   }, [listIndex]);
 
