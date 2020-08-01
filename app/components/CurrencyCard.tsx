@@ -40,6 +40,7 @@ const CurrencyCard = ({
   const zIndex = useRef(1); // Gets set to 100 while card is picked up
   const valueFontSize = 18 - referenceCurrencyState.referenceMultiplier.toString().length * 0.5; // I want the text to shrink slightly with the amount of digits
   let translateY = new Animated.Value(0);
+  const shadowRadius = useRef(new Animated.Value(0));
 
   // Doing this because currencyValue will be undefined until the values get propagated into the state:
   let currencyValue = "";
@@ -107,6 +108,11 @@ const CurrencyCard = ({
         toValue: widthValue.current,
         useNativeDriver: false,
       }).start();
+      Animated.timing(shadowRadius.current, {
+        duration: 200,
+        toValue: 10,
+        useNativeDriver: false,
+      }).start();
     }
     if (event.nativeEvent.state == State.END) {
       bIsPickedUp.current = false;
@@ -119,6 +125,11 @@ const CurrencyCard = ({
         easing: Easing.out(Easing.quad),
         useNativeDriver: false,
       }).start();
+      Animated.timing(shadowRadius.current, {
+        duration: 200,
+        toValue: 0,
+        useNativeDriver: false,
+      }).start();
       displayIndex.current = listIndex;
     }
   }
@@ -127,6 +138,7 @@ const CurrencyCard = ({
     <Animated.View
       style={[
         styles.container,
+        { shadowRadius: shadowRadius.current },
         { zIndex: zIndex.current },
         { transform: [{ translateY: translateY }, { scaleX: width }] },
       ]}
