@@ -48,7 +48,6 @@ const CurrencyCard = ({
 
   useEffect(() => {
     if (bIsPickedUp.current == false) {
-      // console.log(`Changed index on ${currencyName} from ${displayIndex.current}`);
       Animated.timing(translateY, {
         duration: 200,
         toValue: (listIndex - displayIndex.current) * 75,
@@ -85,8 +84,6 @@ const CurrencyCard = ({
     translationY = Math.round(translationY / 75); // How many slots away we've gone since picked up
     if (Math.round(indexOffset.current) != translationY) {
       indexOffset.current = translationY;
-      // console.log(`Swapping ${listIndex} with ${listIndex + translationY}`);
-      // dispatch(SwapInCurrencyList({ from: listIndex, to: listIndex + translationY }));
       dispatch(
         SwapInCurrencyList({
           from: listIndex,
