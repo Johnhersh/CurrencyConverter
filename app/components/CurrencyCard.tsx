@@ -37,6 +37,7 @@ const CurrencyCard = ({
   const displayIndex = useRef(listIndex);
   const bIsPickedUp = useRef(false);
   const widthValue = useRef(1); // Saving width value in ref so it doesn't get reset when swapping
+  const zIndex = useRef(1); // Gets set to 100 while card is picked up
   const valueFontSize = 18 - referenceCurrencyState.referenceMultiplier.toString().length * 0.5; // I want the text to shrink slightly with the amount of digits
   let translateY = new Animated.Value(0);
 
@@ -99,6 +100,7 @@ const CurrencyCard = ({
     if (event.nativeEvent.state == State.ACTIVE) {
       bIsPickedUp.current = true;
       widthValue.current = 1.03;
+      zIndex.current = 100;
       Animated.timing(width, {
         duration: 200,
         toValue: widthValue.current,
@@ -108,6 +110,7 @@ const CurrencyCard = ({
     if (event.nativeEvent.state == State.END) {
       bIsPickedUp.current = false;
       widthValue.current = 1;
+      zIndex.current = 1;
       width.setValue(widthValue.current);
       Animated.timing(translateY, {
         duration: 200,
@@ -120,7 +123,11 @@ const CurrencyCard = ({
 
   return (
     <Animated.View
-      style={[styles.container, { transform: [{ translateY: translateY }, { scaleX: width }] }]}
+      style={[
+        styles.container,
+        { zIndex: zIndex.current },
+        { transform: [{ translateY: translateY }, { scaleX: width }] },
+      ]}
     >
       <TouchableOpacity style={styles.touchable} onPress={onPress}>
         <View style={styles.currencyContainer}>
