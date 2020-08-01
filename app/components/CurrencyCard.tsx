@@ -55,7 +55,7 @@ const CurrencyCard = ({
         useNativeDriver: true,
       }).start();
       displayIndex.current = listIndex;
-      // console.log(`To ${displayIndex.current}`);
+      console.log(`To ${displayIndex.current}`);
     }
   }, [listIndex]);
 
@@ -82,11 +82,17 @@ const CurrencyCard = ({
       useNativeDriver: true,
     }).start();
 
-    translationY = Math.round(translationY / 75);
+    translationY = Math.round(translationY / 75); // How many slots away we've gone since picked up
     if (Math.round(indexOffset.current) != translationY) {
       indexOffset.current = translationY;
       // console.log(`Swapping ${listIndex} with ${listIndex + translationY}`);
-      dispatch(SwapInCurrencyList({ from: listIndex, to: listIndex + translationY }));
+      // dispatch(SwapInCurrencyList({ from: listIndex, to: listIndex + translationY }));
+      dispatch(
+        SwapInCurrencyList({
+          from: listIndex,
+          to: displayIndex.current + translationY,
+        })
+      );
     }
   }
 
