@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: 300,
-    width: "95%",
+    width: "95%", // Leaving 5% gap to expand when the user picks up a card
     maxHeight: 70,
     marginVertical: 5,
     borderRadius: 7,
