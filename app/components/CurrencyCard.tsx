@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity, Animated, Easing } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import {
   PanGestureHandler,
@@ -52,8 +52,9 @@ const CurrencyCard = ({
   useEffect(() => {
     if (bIsPickedUp.current == false) {
       Animated.timing(translateY, {
-        duration: 200,
+        duration: 300,
         toValue: (listIndex - displayIndex.current) * 75,
+        easing: Easing.out(Easing.quad),
         useNativeDriver: false,
       }).start();
       displayIndex.current = listIndex;
@@ -113,8 +114,9 @@ const CurrencyCard = ({
       zIndex.current = 1;
       width.setValue(widthValue.current);
       Animated.timing(translateY, {
-        duration: 200,
+        duration: 300,
         toValue: (listIndex - displayIndex.current) * 75,
+        easing: Easing.out(Easing.quad),
         useNativeDriver: false,
       }).start();
       displayIndex.current = listIndex;
