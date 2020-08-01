@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#4E91FF",
     backgroundColor: "lightblue",
+    width: "95%",
   },
   textInputStyle: {
     flex: -1,
