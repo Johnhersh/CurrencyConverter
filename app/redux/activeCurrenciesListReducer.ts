@@ -25,6 +25,7 @@ export const activeCurrenciesListReducer = (
     case "SWAP_IN_CURRENCY_LIST": {
       let newState = state.currencies;
       let a = newState[action.payload.from];
+      if (action.payload.to >= newState.length) return { currencies: newState }; // Catch the case when the user drags the bottom-most currency further down
       newState[action.payload.from] = newState[action.payload.to];
       newState[action.payload.to] = a;
 

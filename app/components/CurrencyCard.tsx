@@ -76,7 +76,6 @@ const CurrencyCard = ({
   translateY.setOffset(75 + 75 * displayIndex.current);
   function handleGesture(event: PanGestureHandlerGestureEvent) {
     let translationY = event.nativeEvent.translationY;
-    console.log(translationY);
     Animated.timing(translateY, {
       duration: 0,
       toValue: translationY,
