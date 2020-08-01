@@ -22,6 +22,14 @@ export const activeCurrenciesListReducer = (
       }
       return { currencies: newState };
     }
+    case "SWAP_IN_CURRENCY_LIST": {
+      let newState = state.currencies;
+      let a = newState[action.payload.from];
+      newState[action.payload.from] = newState[action.payload.to];
+      newState[action.payload.to] = a;
+
+      return { currencies: newState };
+    }
     default:
       return state;
   }

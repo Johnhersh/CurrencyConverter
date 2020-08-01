@@ -3,6 +3,7 @@ export const UPDATE_REFERENCE = "UPDATE_REFERENCE_CURRENCY";
 
 export const ADD_TO_CURRENCY_LIST = "ADD_TO_CURRENCY_LIST";
 export const REMOVE_FROM_CURRENCY_LIST = "REMOVE_FROM_CURRENCY_LIST";
+export const SWAP_IN_CURRENCY_LIST = "SWAP_IN_CURRENCY_LIST";
 
 // Currency List:
 export interface activeCurrenciesListState {
@@ -13,9 +14,15 @@ interface AddToCurrencyList {
   type: typeof ADD_TO_CURRENCY_LIST;
   payload: string;
 }
+
 interface RemoveFromCurrencyList {
   type: typeof REMOVE_FROM_CURRENCY_LIST;
   payload: string;
+}
+
+interface SwapInCurrencyList {
+  type: typeof SWAP_IN_CURRENCY_LIST;
+  payload: { from: number; to: number };
 }
 
 // Currencies Data:
@@ -42,5 +49,8 @@ export interface UpdateRefrence {
 
 // Final exports:
 export type CurrencyActionTypes = UpdateCurrencies;
-export type CurrencyListActionTypes = AddToCurrencyList | RemoveFromCurrencyList;
+export type CurrencyListActionTypes =
+  | AddToCurrencyList
+  | RemoveFromCurrencyList
+  | SwapInCurrencyList;
 export type ReferenceActionType = UpdateRefrence;

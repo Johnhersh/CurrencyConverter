@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import {
@@ -14,6 +14,7 @@ import {
   AddToCurrencyList,
   RemoveFromCurrencyList,
   UpdateReferenceCurrency,
+  SwapInCurrencyList,
 } from "../redux/actions";
 
 import { currencySymbols, currencyNames, currencyIcons } from "../currencyDefinitions";
@@ -22,7 +23,6 @@ import { currencySymbols, currencyNames, currencyIcons } from "../currencyDefini
 interface PropsBuiltIn {
   currencyName: string;
   listIndex: number;
-  swapFunction: (from: number, to: number) => void;
 }
 
 const CurrencyCard = ({
@@ -30,10 +30,13 @@ const CurrencyCard = ({
   listIndex,
   currenciesDataState,
   referenceCurrencyState,
-  swapFunction,
 }: Props) => {
   const currencySymbol = currencySymbols[currencyName];
   const dispatch = useDispatch();
+  const indexOffset = useRef(0);
+  const displayIndex = useRef(listIndex);
+  const bIsPickedUp = useRef(false);
+  const valueFontSize = 18 - referenceCurrencyState.referenceMultiplier.toString().length * 0.5; // I want the text to shrink slightly with the amount of digits
 
   // Doing this because currencyValue will be undefined until the values get propagated into the state:
   let currencyValue = "";
@@ -42,7 +45,19 @@ const CurrencyCard = ({
       currenciesDataState.currencies[currencyName] * referenceCurrencyState.referenceMultiplier
     ).toFixed(3);
   }
-  const valueFontSize = 18 - referenceCurrencyState.referenceMultiplier.toString().length * 0.5; // I want the text to shrink slightly with the amount of digits
+
+  useEffect(() => {
+    if (bIsPickedUp.current == false) {
+      // console.log(`Changed index on ${currencyName} from ${displayIndex.current}`);
+      Animated.timing(translateY, {
+        duration: 200,
+        toValue: (listIndex - displayIndex.current) * 75,
+        useNativeDriver: true,
+      }).start();
+      displayIndex.current = listIndex;
+      // console.log(`To ${displayIndex.current}`);
+    }
+  }, [listIndex]);
 
   function onPress() {
     dispatch(AddToCurrencyList(referenceCurrencyState.referenceName));
@@ -56,11 +71,12 @@ const CurrencyCard = ({
     );
   }
 
-  let indexOffset = 0;
+  // Handle dragging section ***********************************************
   let translateY = new Animated.Value(0);
-  translateY.setOffset(75 + 75 * listIndex);
+  translateY.setOffset(75 + 75 * displayIndex.current);
   function handleGesture(event: PanGestureHandlerGestureEvent) {
     let translationY = event.nativeEvent.translationY;
+    console.log(translationY);
     Animated.timing(translateY, {
       duration: 0,
       toValue: translationY,
@@ -68,19 +84,29 @@ const CurrencyCard = ({
     }).start();
 
     translationY = Math.round(translationY / 75);
-    if (Math.round(indexOffset) != translationY) {
-      swapFunction(listIndex, translationY);
-      indexOffset = translationY;
+    if (Math.round(indexOffset.current) != translationY) {
+      indexOffset.current = translationY;
+      // console.log(`Swapping ${listIndex} with ${listIndex + translationY}`);
+      dispatch(SwapInCurrencyList({ from: listIndex, to: listIndex + translationY }));
     }
   }
 
+  // Expand card when picked up section ************************************
   let width = new Animated.Value(1);
   function handleGestureStateChange(event: PanGestureHandlerStateChangeEvent) {
     if (event.nativeEvent.state == State.ACTIVE) {
-      Animated.timing(width, { duration: 200, toValue: 1.02, useNativeDriver: true }).start();
+      bIsPickedUp.current = true;
+      Animated.timing(width, { duration: 200, toValue: 1.03, useNativeDriver: true }).start();
     }
     if (event.nativeEvent.state == State.END) {
+      bIsPickedUp.current = false;
       width.setValue(1);
+      Animated.timing(translateY, {
+        duration: 200,
+        toValue: (listIndex - displayIndex.current) * 75,
+        useNativeDriver: true,
+      }).start();
+      displayIndex.current = listIndex;
     }
   }
 

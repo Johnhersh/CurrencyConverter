@@ -4,6 +4,7 @@ import {
   REMOVE_FROM_CURRENCY_LIST,
   CurrencyActionTypes,
   UPDATE_CURRENCIES,
+  SWAP_IN_CURRENCY_LIST,
   currenciesDataState,
   ReferenceActionType,
   referenceCurrency,
@@ -22,6 +23,16 @@ export function RemoveFromCurrencyList(newCurrency: string): CurrencyListActionT
   return {
     type: REMOVE_FROM_CURRENCY_LIST,
     payload: newCurrency,
+  };
+}
+
+export function SwapInCurrencyList(swapItems: {
+  from: number;
+  to: number;
+}): CurrencyListActionTypes {
+  return {
+    type: SWAP_IN_CURRENCY_LIST,
+    payload: swapItems,
   };
 }
 
