@@ -38,6 +38,7 @@ const CurrencyCard = ({
   const bIsPickedUp = useRef(false);
   const widthValue = useRef(1); // Saving width value in ref so it doesn't get reset when swapping
   const valueFontSize = 18 - referenceCurrencyState.referenceMultiplier.toString().length * 0.5; // I want the text to shrink slightly with the amount of digits
+  let translateY = new Animated.Value(0);
 
   // Doing this because currencyValue will be undefined until the values get propagated into the state:
   let currencyValue = "";
@@ -52,7 +53,7 @@ const CurrencyCard = ({
       Animated.timing(translateY, {
         duration: 200,
         toValue: (listIndex - displayIndex.current) * 75,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }).start();
       displayIndex.current = listIndex;
     }
@@ -71,14 +72,13 @@ const CurrencyCard = ({
   }
 
   /** Handle dragging section */
-  let translateY = new Animated.Value(0);
   translateY.setOffset(75 + 75 * displayIndex.current);
   function handleGesture(event: PanGestureHandlerGestureEvent) {
     let translationY = event.nativeEvent.translationY;
     Animated.timing(translateY, {
       duration: 0,
       toValue: translationY,
-      useNativeDriver: true,
+      useNativeDriver: false,
     }).start();
 
     translationY = Math.round(translationY / 75); // How many slots away we've gone since picked up
@@ -102,7 +102,7 @@ const CurrencyCard = ({
       Animated.timing(width, {
         duration: 200,
         toValue: widthValue.current,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }).start();
     }
     if (event.nativeEvent.state == State.END) {
@@ -112,7 +112,7 @@ const CurrencyCard = ({
       Animated.timing(translateY, {
         duration: 200,
         toValue: (listIndex - displayIndex.current) * 75,
-        useNativeDriver: true,
+        useNativeDriver: false,
       }).start();
       displayIndex.current = listIndex;
     }
