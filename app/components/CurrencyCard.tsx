@@ -51,6 +51,7 @@ const CurrencyCard = ({
   }
 
   useEffect(() => {
+    console.log(`Index changed on ${currencyName}!`);
     if (bIsPickedUp.current == false) {
       Animated.timing(translateY, {
         duration: 300,
@@ -78,6 +79,7 @@ const CurrencyCard = ({
   translateY.setOffset(75 + 75 * displayIndex.current);
   function handleGesture(event: PanGestureHandlerGestureEvent) {
     let translationY = event.nativeEvent.translationY;
+    // console.log(translationY);
     Animated.timing(translateY, {
       duration: 0,
       toValue: translationY,
@@ -85,8 +87,10 @@ const CurrencyCard = ({
     }).start();
 
     translationY = Math.round(translationY / 75); // How many slots away we've gone since picked up
+    console.log(`TranslationY: ${translationY}`);
     if (indexOffset.current != translationY) {
       indexOffset.current = translationY;
+      console.log(`swapping from ${listIndex} to ${displayIndex.current + translationY}`);
       dispatch(
         SwapInCurrencyList({
           from: listIndex,
