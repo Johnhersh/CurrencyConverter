@@ -1,17 +1,27 @@
-import React, { useEffect } from "react";
-import { StyleSheet, View, Keyboard, TouchableWithoutFeedback } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, View, Keyboard, TouchableWithoutFeedback, Animated } from "react-native";
 import { connect, ConnectedProps, useDispatch } from "react-redux";
 
 import { RootState } from "../redux/rootReducer";
 import { UpdateCurrencies } from "../redux/actions";
 
+import {
+  PanGestureHandler,
+  PanGestureHandlerStateChangeEvent,
+  PanGestureHandlerGestureEvent,
+  State,
+} from "react-native-gesture-handler";
+
 import { getCurrenciesFromApi, getCryptoCurrenciesFromApi } from "../fetchCurrencies";
 import CurrencyStatusBar from "../components/CurrencyStatusBar";
 import CurrencyCard from "../components/CurrencyCard";
+import CurrencyHoverCard from "../components/CurrencyHoverCard";
 import ReferenceCurrencyCard from "../components/ReferenceCurrencyCard";
 
 const HomeView = (props: Props) => {
   const dispatch = useDispatch();
+  const [bIsPickedUp, setPickedUp] = useState(false);
+  let translateY = new Animated.Value(-75);
 
   useEffect(() => {
     if (["BTC", "ETH"].includes(props.referenceCurrencyState.referenceName)) {
@@ -33,14 +43,40 @@ const HomeView = (props: Props) => {
     return <CurrencyCard key={currency} currencyName={currency} listIndex={index} />;
   });
 
+  function handleGesture(event: PanGestureHandlerGestureEvent) {
+    // console.log(event.nativeEvent.absoluteY);
+    translateY.setValue(event.nativeEvent.absoluteY - 150);
+  }
+
+  function handleGestureStateChange(event: PanGestureHandlerStateChangeEvent) {
+    if (event.nativeEvent.state == State.ACTIVE) {
+      console.log("Picking up");
+      setPickedUp(true);
+    } else if (event.nativeEvent.state == State.END) {
+      console.log("Setting down");
+      setPickedUp(false);
+    }
+  }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <CurrencyStatusBar style="dark" />
-        <View style={styles.cardsContainer}>
-          <ReferenceCurrencyCard />
-          {CurrencyCards}
-        </View>
+        <PanGestureHandler
+          onGestureEvent={handleGesture}
+          onHandlerStateChange={handleGestureStateChange}
+        >
+          <View style={styles.cardsContainer}>
+            <ReferenceCurrencyCard />
+            {bIsPickedUp && (
+              <Animated.View style={[styles.hoverCardContainer, { top: translateY }]}>
+                <CurrencyHoverCard currencyName={"USD"} />
+              </Animated.View>
+            )}
+
+            {CurrencyCards}
+          </View>
+        </PanGestureHandler>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -69,5 +105,11 @@ const styles = StyleSheet.create({
     flex: 1,
     width: "80%",
     alignItems: "center",
+  },
+  hoverCardContainer: {
+    width: "100%",
+    alignItems: "center",
+    top: 0,
+    zIndex: 100,
   },
 });

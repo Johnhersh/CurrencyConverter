@@ -1,12 +1,6 @@
-import React, { useRef, useEffect } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity, Animated, Easing } from "react-native";
-import { FontAwesome5 } from "@expo/vector-icons";
-import {
-  PanGestureHandler,
-  PanGestureHandlerStateChangeEvent,
-  PanGestureHandlerGestureEvent,
-  State,
-} from "react-native-gesture-handler";
+import React from "react";
+import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from "react-native";
+// import { FontAwesome5 } from "@expo/vector-icons";
 
 import { connect, ConnectedProps, useDispatch } from "react-redux";
 import { RootState } from "../redux/rootReducer";
@@ -14,7 +8,7 @@ import {
   AddToCurrencyList,
   RemoveFromCurrencyList,
   UpdateReferenceCurrency,
-  SwapInCurrencyList,
+  // SwapInCurrencyList,
 } from "../redux/actions";
 
 import { currencySymbols, currencyNames, currencyIcons } from "../currencyDefinitions";
@@ -32,15 +26,9 @@ const CurrencyCard = ({
   referenceCurrencyState,
 }: Props) => {
   const currencySymbol = currencySymbols[currencyName];
+  const translateY = 75 + listIndex * 75;
   const dispatch = useDispatch();
-  const indexOffset = useRef(0);
-  const displayIndex = useRef(listIndex);
-  const bIsPickedUp = useRef(false);
-  const widthValue = useRef(1); // Saving width value in ref so it doesn't get reset when swapping
-  const zIndex = useRef(1); // Gets set to 100 while card is picked up
   const valueFontSize = 18 - referenceCurrencyState.referenceMultiplier.toString().length * 0.5; // I want the text to shrink slightly with the amount of digits
-  let translateY = new Animated.Value(0);
-  const shadowRadius = useRef(new Animated.Value(0));
 
   // Doing this because currencyValue will be undefined until the values get propagated into the state:
   let currencyValue = "";
@@ -49,19 +37,6 @@ const CurrencyCard = ({
       currenciesDataState.currencies[currencyName] * referenceCurrencyState.referenceMultiplier
     ).toFixed(3);
   }
-
-  useEffect(() => {
-    console.log(`Index changed on ${currencyName}!`);
-    if (bIsPickedUp.current == false) {
-      Animated.timing(translateY, {
-        duration: 300,
-        toValue: (listIndex - displayIndex.current) * 75,
-        easing: Easing.out(Easing.quad),
-        useNativeDriver: false,
-      }).start();
-      displayIndex.current = listIndex;
-    }
-  }, [listIndex]);
 
   function onPress() {
     dispatch(AddToCurrencyList(referenceCurrencyState.referenceName));
@@ -75,78 +50,8 @@ const CurrencyCard = ({
     );
   }
 
-  /** Handle dragging section */
-  translateY.setOffset(75 + 75 * displayIndex.current);
-  function handleGesture(event: PanGestureHandlerGestureEvent) {
-    let translationY = event.nativeEvent.translationY;
-    // console.log(translationY);
-    Animated.timing(translateY, {
-      duration: 0,
-      toValue: translationY,
-      useNativeDriver: false,
-    }).start();
-
-    translationY = Math.round(translationY / 75); // How many slots away we've gone since picked up
-    console.log(`TranslationY: ${translationY}`);
-    if (indexOffset.current != translationY) {
-      indexOffset.current = translationY;
-      console.log(`swapping from ${listIndex} to ${displayIndex.current + translationY}`);
-      dispatch(
-        SwapInCurrencyList({
-          from: listIndex,
-          to: displayIndex.current + translationY,
-        })
-      );
-    }
-  }
-
-  /** Expand card when picked up section */
-  let width = new Animated.Value(widthValue.current);
-  function handleGestureStateChange(event: PanGestureHandlerStateChangeEvent) {
-    if (event.nativeEvent.state == State.ACTIVE) {
-      bIsPickedUp.current = true;
-      widthValue.current = 1.03;
-      zIndex.current = 100;
-      Animated.timing(width, {
-        duration: 200,
-        toValue: widthValue.current,
-        useNativeDriver: false,
-      }).start();
-      Animated.timing(shadowRadius.current, {
-        duration: 200,
-        toValue: 10,
-        useNativeDriver: false,
-      }).start();
-    }
-    if (event.nativeEvent.state == State.END) {
-      bIsPickedUp.current = false;
-      widthValue.current = 1;
-      zIndex.current = 1;
-      width.setValue(widthValue.current);
-      Animated.timing(translateY, {
-        duration: 300,
-        toValue: (listIndex - displayIndex.current) * 75,
-        easing: Easing.out(Easing.quad),
-        useNativeDriver: false,
-      }).start();
-      Animated.timing(shadowRadius.current, {
-        duration: 200,
-        toValue: 0,
-        useNativeDriver: false,
-      }).start();
-      displayIndex.current = listIndex;
-    }
-  }
-
   return (
-    <Animated.View
-      style={[
-        styles.container,
-        { shadowRadius: shadowRadius.current },
-        { zIndex: zIndex.current },
-        { transform: [{ translateY: translateY }, { scaleX: width }] },
-      ]}
-    >
+    <Animated.View style={[styles.container, { transform: [{ translateY: translateY }] }]}>
       <TouchableOpacity style={styles.touchable} onPress={onPress}>
         <View style={styles.currencyContainer}>
           <Image source={currencyIcons[currencyName]} style={styles.imageContainer} />
@@ -159,14 +64,6 @@ const CurrencyCard = ({
           <Text style={{ fontSize: valueFontSize }}>{currencySymbol + " " + currencyValue}</Text>
         </View>
       </TouchableOpacity>
-      <PanGestureHandler
-        onGestureEvent={handleGesture}
-        onHandlerStateChange={handleGestureStateChange}
-      >
-        <Animated.View style={styles.gripContainer}>
-          <FontAwesome5 name="grip-vertical" size={24} color="black" />
-        </Animated.View>
-      </PanGestureHandler>
     </Animated.View>
   );
 };
