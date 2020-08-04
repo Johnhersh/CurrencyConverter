@@ -67,7 +67,6 @@ const HomeView = (props: Props) => {
   });
 
   function handleGesture(event: PanGestureHandlerGestureEvent) {
-    // console.log(`Y: ${event.nativeEvent.translationY}`);
     translateY.setValue(hoverStartLocation.current + event.nativeEvent.translationY);
   }
 
@@ -75,12 +74,10 @@ const HomeView = (props: Props) => {
     if (event.nativeEvent.state == State.ACTIVE) {
       bHovering.current = true;
       if (bCanPickUp.current) {
-        console.log(`Picking up!`);
         bCanPickUp.current = false;
         translateY.setValue(hoverStartLocation.current);
       }
     } else if (event.nativeEvent.state == State.END) {
-      console.log("Setting down");
       showHoverCard(false);
       setHoverName(""); // I want to reset the hover name because I hide the picked up card based on this name. Resetting it will unhide the card
       bHovering.current = false;
@@ -98,9 +95,7 @@ const HomeView = (props: Props) => {
   }
 
   function onLongPressRelease() {
-    console.log(`Should abandon: ${bHovering.current}`);
     if (!bHovering.current) {
-      console.log(`abandoned: ${hoverName}`);
       showHoverCard(false);
       setHoverName("");
     }
@@ -125,8 +120,6 @@ const HomeView = (props: Props) => {
             {CurrencyCards}
           </View>
         </PanGestureHandler>
-        {/* </Animated.View> */}
-        {/* </LongPressGestureHandler> */}
       </View>
     </TouchableWithoutFeedback>
   );
