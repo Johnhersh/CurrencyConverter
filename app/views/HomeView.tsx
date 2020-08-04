@@ -1,5 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Keyboard, TouchableWithoutFeedback, Animated } from "react-native";
+import React, { useEffect, useState, useRef } from "react";
+import {
+  StyleSheet,
+  View,
+  Keyboard,
+  TouchableWithoutFeedback,
+  Animated,
+  GestureResponderEvent,
+} from "react-native";
 import { connect, ConnectedProps, useDispatch } from "react-redux";
 
 import { RootState } from "../redux/rootReducer";
@@ -9,6 +16,8 @@ import {
   PanGestureHandler,
   PanGestureHandlerStateChangeEvent,
   PanGestureHandlerGestureEvent,
+  // LongPressGestureHandler,
+  // LongPressGestureHandlerStateChangeEvent,
   State,
 } from "react-native-gesture-handler";
 
@@ -21,7 +30,10 @@ import ReferenceCurrencyCard from "../components/ReferenceCurrencyCard";
 const HomeView = (props: Props) => {
   const dispatch = useDispatch();
   const [bIsPickedUp, setPickedUp] = useState(false);
+  const bCanPickUp = useRef(false);
   let translateY = new Animated.Value(-75);
+  // const longPressGesture = React.createRef<LongPressGestureHandler>();
+  // const dragGesture = React.createRef<PanGestureHandler>();
 
   useEffect(() => {
     if (["BTC", "ETH"].includes(props.referenceCurrencyState.referenceName)) {
@@ -40,23 +52,41 @@ const HomeView = (props: Props) => {
   }, [props.referenceCurrencyState.referenceName]);
 
   let CurrencyCards = props.activeCurrenciesList.currencies.map((currency, index) => {
-    return <CurrencyCard key={currency} currencyName={currency} listIndex={index} />;
+    return (
+      <CurrencyCard
+        key={currency}
+        currencyName={currency}
+        listIndex={index}
+        onLongPress={onLongPress}
+        onLongPressRelease={onLongPressRelease}
+      />
+    );
   });
 
   function handleGesture(event: PanGestureHandlerGestureEvent) {
-    // console.log(event.nativeEvent.absoluteY);
     translateY.setValue(event.nativeEvent.absoluteY - 150);
   }
 
   function handleGestureStateChange(event: PanGestureHandlerStateChangeEvent) {
     if (event.nativeEvent.state == State.ACTIVE) {
-      console.log("Picking up");
-      setPickedUp(true);
+      if (bCanPickUp.current) {
+        setPickedUp(true);
+        bCanPickUp.current = false;
+      }
+      console.log(`Picking up!`);
     } else if (event.nativeEvent.state == State.END) {
       console.log("Setting down");
       setPickedUp(false);
     }
   }
+
+  function onLongPress(event: GestureResponderEvent) {
+    console.log(`Long pressed at: ${event.nativeEvent.locationY}`);
+    bCanPickUp.current = true;
+    // setPickedUp(true);
+    // translateY.setValue(event.nativeEvent.locationY);
+  }
+  function onLongPressRelease() {}
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -77,6 +107,8 @@ const HomeView = (props: Props) => {
             {CurrencyCards}
           </View>
         </PanGestureHandler>
+        {/* </Animated.View> */}
+        {/* </LongPressGestureHandler> */}
       </View>
     </TouchableWithoutFeedback>
   );

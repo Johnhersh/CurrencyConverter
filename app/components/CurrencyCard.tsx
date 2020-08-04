@@ -1,5 +1,13 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Animated,
+  GestureResponderEvent,
+} from "react-native";
 // import { FontAwesome5 } from "@expo/vector-icons";
 
 import { connect, ConnectedProps, useDispatch } from "react-redux";
@@ -13,10 +21,12 @@ import {
 
 import { currencySymbols, currencyNames, currencyIcons } from "../currencyDefinitions";
 
-// Props interface *********************************
+/** Props interface */
 interface PropsBuiltIn {
   currencyName: string;
   listIndex: number;
+  onLongPress: (event: GestureResponderEvent) => void;
+  onLongPressRelease: (event: GestureResponderEvent) => void;
 }
 
 const CurrencyCard = ({
@@ -24,6 +34,8 @@ const CurrencyCard = ({
   listIndex,
   currenciesDataState,
   referenceCurrencyState,
+  onLongPress,
+  onLongPressRelease,
 }: Props) => {
   const currencySymbol = currencySymbols[currencyName];
   const translateY = 75 + listIndex * 75;
@@ -52,7 +64,12 @@ const CurrencyCard = ({
 
   return (
     <Animated.View style={[styles.container, { transform: [{ translateY: translateY }] }]}>
-      <TouchableOpacity style={styles.touchable} onPress={onPress}>
+      <TouchableOpacity
+        style={styles.touchable}
+        onPress={onPress}
+        onLongPress={onLongPress}
+        onPressOut={onLongPressRelease}
+      >
         <View style={styles.currencyContainer}>
           <Image source={currencyIcons[currencyName]} style={styles.imageContainer} />
           <View style={styles.currencyLongNameContainer}>
