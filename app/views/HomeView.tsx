@@ -162,5 +162,8 @@ const styles = StyleSheet.create({
     top: 0,
     zIndex: 100,
     transform: [{ scaleX: 1.03 }],
+    shadowRadius: 6,
+    shadowOpacity: 50,
+    shadowOffset: { width: 0, height: 4 },
   },
 });
