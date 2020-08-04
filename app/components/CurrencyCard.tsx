@@ -77,6 +77,7 @@ const CurrencyCard = ({
         onPress={onPress}
         onLongPress={processLongPress}
         onPressOut={onLongPressRelease}
+        delayPressOut={100} // This is needed because handleGestureStateChange in HomeView may not happen immediately, so PressOut could override it
       >
         <View style={styles.currencyContainer}>
           <Image source={currencyIcons[currencyName]} style={styles.imageContainer} />

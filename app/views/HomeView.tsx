@@ -33,6 +33,7 @@ const HomeView = (props: Props) => {
   const [hoverName, setHoverName] = useState("USD");
   const [hoverValue, setHoverValue] = useState("0");
   const bCanPickUp = useRef(false);
+  const bHovering = useRef(false);
   const hoverStartLocation = useRef(0);
   let translateY = new Animated.Value(hoverStartLocation.current);
 
@@ -72,15 +73,17 @@ const HomeView = (props: Props) => {
 
   function handleGestureStateChange(event: PanGestureHandlerStateChangeEvent) {
     if (event.nativeEvent.state == State.ACTIVE) {
+      bHovering.current = true;
       if (bCanPickUp.current) {
-        translateY.setValue(hoverStartLocation.current);
+        console.log(`Picking up!`);
         bCanPickUp.current = false;
+        translateY.setValue(hoverStartLocation.current);
       }
-      console.log(`Picking up!`);
     } else if (event.nativeEvent.state == State.END) {
       console.log("Setting down");
       showHoverCard(false);
       setHoverName(""); // I want to reset the hover name because I hide the picked up card based on this name. Resetting it will unhide the card
+      bHovering.current = false;
     }
   }
 
@@ -95,7 +98,9 @@ const HomeView = (props: Props) => {
   }
 
   function onLongPressRelease() {
-    if (hoverName != "") {
+    console.log(`Should abandon: ${bHovering.current}`);
+    if (!bHovering.current) {
+      console.log(`abandoned: ${hoverName}`);
       showHoverCard(false);
       setHoverName("");
     }
@@ -156,5 +161,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     top: 0,
     zIndex: 100,
+    transform: [{ scaleX: 1.03 }],
   },
 });
