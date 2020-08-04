@@ -25,7 +25,7 @@ import { currencySymbols, currencyNames, currencyIcons } from "../currencyDefini
 interface PropsBuiltIn {
   currencyName: string;
   listIndex: number;
-  onLongPress: (event: GestureResponderEvent) => void;
+  onLongPress: (event: GestureResponderEvent, currencyValue: string, currencyName: string) => void;
   onLongPressRelease: (event: GestureResponderEvent) => void;
 }
 
@@ -62,12 +62,16 @@ const CurrencyCard = ({
     );
   }
 
+  function processLongPress(event: GestureResponderEvent) {
+    onLongPress(event, currencyValue, currencyName);
+  }
+
   return (
     <Animated.View style={[styles.container, { transform: [{ translateY: translateY }] }]}>
       <TouchableOpacity
         style={styles.touchable}
         onPress={onPress}
-        onLongPress={onLongPress}
+        onLongPress={processLongPress}
         onPressOut={onLongPressRelease}
       >
         <View style={styles.currencyContainer}>

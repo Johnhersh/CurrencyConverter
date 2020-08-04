@@ -6,13 +6,11 @@ import { currencySymbols, currencyNames, currencyIcons } from "../currencyDefini
 /** Props interface */
 interface Props {
   currencyName: string;
+  currencyValue: string;
 }
 
-const CurrencyHoverCard = ({ currencyName = "USD" }: Props) => {
+const CurrencyHoverCard = ({ currencyName = "USD", currencyValue = "" }: Props) => {
   const currencySymbol = currencySymbols[currencyName];
-
-  // Doing this because currencyValue will be undefined until the values get propagated into the state:
-  let currencyValue = "";
 
   return (
     <Animated.View style={[styles.container]}>

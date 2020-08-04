@@ -29,7 +29,9 @@ import ReferenceCurrencyCard from "../components/ReferenceCurrencyCard";
 
 const HomeView = (props: Props) => {
   const dispatch = useDispatch();
-  const [bIsPickedUp, setPickedUp] = useState(false);
+  const [bShowHoverCard, showHoverCard] = useState(false);
+  const [hoverName, setHoverName] = useState("USD");
+  const [hoverValue, setHoverValue] = useState("0");
   const bCanPickUp = useRef(false);
   let translateY = new Animated.Value(-75);
   // const longPressGesture = React.createRef<LongPressGestureHandler>();
@@ -64,27 +66,30 @@ const HomeView = (props: Props) => {
   });
 
   function handleGesture(event: PanGestureHandlerGestureEvent) {
+    // console.log(`Y: ${event.nativeEvent.translationY}`);
     translateY.setValue(event.nativeEvent.absoluteY - 150);
   }
 
   function handleGestureStateChange(event: PanGestureHandlerStateChangeEvent) {
     if (event.nativeEvent.state == State.ACTIVE) {
       if (bCanPickUp.current) {
-        setPickedUp(true);
+        showHoverCard(true);
         bCanPickUp.current = false;
       }
       console.log(`Picking up!`);
     } else if (event.nativeEvent.state == State.END) {
       console.log("Setting down");
-      setPickedUp(false);
+      showHoverCard(false);
     }
   }
 
-  function onLongPress(event: GestureResponderEvent) {
+  function onLongPress(event: GestureResponderEvent, currencyValue: string, currencyName: string) {
     console.log(`Long pressed at: ${event.nativeEvent.locationY}`);
+
+    setHoverName(currencyName);
+    setHoverValue(currencyValue);
+
     bCanPickUp.current = true;
-    // setPickedUp(true);
-    // translateY.setValue(event.nativeEvent.locationY);
   }
   function onLongPressRelease() {}
 
@@ -98,9 +103,9 @@ const HomeView = (props: Props) => {
         >
           <View style={styles.cardsContainer}>
             <ReferenceCurrencyCard />
-            {bIsPickedUp && (
+            {bShowHoverCard && (
               <Animated.View style={[styles.hoverCardContainer, { top: translateY }]}>
-                <CurrencyHoverCard currencyName={"USD"} />
+                <CurrencyHoverCard currencyName={hoverName} currencyValue={hoverValue} />
               </Animated.View>
             )}
 
