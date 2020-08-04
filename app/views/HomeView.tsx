@@ -33,9 +33,8 @@ const HomeView = (props: Props) => {
   const [hoverName, setHoverName] = useState("USD");
   const [hoverValue, setHoverValue] = useState("0");
   const bCanPickUp = useRef(false);
-  let translateY = new Animated.Value(-75);
-  // const longPressGesture = React.createRef<LongPressGestureHandler>();
-  // const dragGesture = React.createRef<PanGestureHandler>();
+  const hoverStartLocation = useRef(0);
+  let translateY = new Animated.Value(hoverStartLocation.current);
 
   useEffect(() => {
     if (["BTC", "ETH"].includes(props.referenceCurrencyState.referenceName)) {
@@ -61,37 +60,46 @@ const HomeView = (props: Props) => {
         listIndex={index}
         onLongPress={onLongPress}
         onLongPressRelease={onLongPressRelease}
+        opacity={hoverName == currency ? 0 : 1}
       />
     );
   });
 
   function handleGesture(event: PanGestureHandlerGestureEvent) {
     // console.log(`Y: ${event.nativeEvent.translationY}`);
-    translateY.setValue(event.nativeEvent.absoluteY - 150);
+    translateY.setValue(hoverStartLocation.current + event.nativeEvent.translationY);
   }
 
   function handleGestureStateChange(event: PanGestureHandlerStateChangeEvent) {
     if (event.nativeEvent.state == State.ACTIVE) {
       if (bCanPickUp.current) {
-        showHoverCard(true);
+        translateY.setValue(hoverStartLocation.current);
         bCanPickUp.current = false;
       }
       console.log(`Picking up!`);
     } else if (event.nativeEvent.state == State.END) {
       console.log("Setting down");
       showHoverCard(false);
+      setHoverName(""); // I want to reset the hover name because I hide the picked up card based on this name. Resetting it will unhide the card
     }
   }
 
   function onLongPress(event: GestureResponderEvent, currencyValue: string, currencyName: string) {
-    console.log(`Long pressed at: ${event.nativeEvent.locationY}`);
+    hoverStartLocation.current = event.nativeEvent.pageY - 170; // Note: I'm not sure why this 170 offset is needed
 
+    showHoverCard(true);
     setHoverName(currencyName);
     setHoverValue(currencyValue);
 
     bCanPickUp.current = true;
   }
-  function onLongPressRelease() {}
+
+  function onLongPressRelease() {
+    if (hoverName != "") {
+      showHoverCard(false);
+      setHoverName("");
+    }
+  }
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

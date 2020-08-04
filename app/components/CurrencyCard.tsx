@@ -27,6 +27,7 @@ interface PropsBuiltIn {
   listIndex: number;
   onLongPress: (event: GestureResponderEvent, currencyValue: string, currencyName: string) => void;
   onLongPressRelease: (event: GestureResponderEvent) => void;
+  opacity: number;
 }
 
 const CurrencyCard = ({
@@ -36,6 +37,7 @@ const CurrencyCard = ({
   referenceCurrencyState,
   onLongPress,
   onLongPressRelease,
+  opacity,
 }: Props) => {
   const currencySymbol = currencySymbols[currencyName];
   const translateY = 75 + listIndex * 75;
@@ -67,7 +69,9 @@ const CurrencyCard = ({
   }
 
   return (
-    <Animated.View style={[styles.container, { transform: [{ translateY: translateY }] }]}>
+    <Animated.View
+      style={[styles.container, { transform: [{ translateY: translateY }] }, { opacity: opacity }]}
+    >
       <TouchableOpacity
         style={styles.touchable}
         onPress={onPress}
