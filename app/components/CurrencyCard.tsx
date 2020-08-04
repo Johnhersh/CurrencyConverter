@@ -16,7 +16,6 @@ import {
   AddToCurrencyList,
   RemoveFromCurrencyList,
   UpdateReferenceCurrency,
-  // SwapInCurrencyList,
 } from "../redux/actions";
 
 import { currencySymbols, currencyNames, currencyIcons } from "../currencyDefinitions";

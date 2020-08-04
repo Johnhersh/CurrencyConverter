@@ -16,8 +16,6 @@ import {
   PanGestureHandler,
   PanGestureHandlerStateChangeEvent,
   PanGestureHandlerGestureEvent,
-  // LongPressGestureHandler,
-  // LongPressGestureHandlerStateChangeEvent,
   State,
 } from "react-native-gesture-handler";
 
