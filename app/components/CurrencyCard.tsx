@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Animated,
   GestureResponderEvent,
+  // LayoutAnimation,
 } from "react-native";
 // import { FontAwesome5 } from "@expo/vector-icons";
 
@@ -24,7 +25,12 @@ import { currencySymbols, currencyNames, currencyIcons } from "../currencyDefini
 interface PropsBuiltIn {
   currencyName: string;
   listIndex: number;
-  onLongPress: (event: GestureResponderEvent, currencyValue: string, currencyName: string) => void;
+  onLongPress: (
+    event: GestureResponderEvent,
+    currencyValue: string,
+    currencyName: string,
+    listIndex: number
+  ) => void;
   onLongPressRelease: (event: GestureResponderEvent) => void;
   opacity: number;
 }
@@ -39,9 +45,11 @@ const CurrencyCard = ({
   opacity,
 }: Props) => {
   const currencySymbol = currencySymbols[currencyName];
-  const translateY = 75 + listIndex * 75;
+  const translateY = useRef(new Animated.Value(75 + listIndex * 75)).current;
   const dispatch = useDispatch();
   const valueFontSize = 18 - referenceCurrencyState.referenceMultiplier.toString().length * 0.5; // I want the text to shrink slightly with the amount of digits
+
+  // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 
   // Doing this because currencyValue will be undefined until the values get propagated into the state:
   let currencyValue = "";
@@ -50,6 +58,10 @@ const CurrencyCard = ({
       currenciesDataState.currencies[currencyName] * referenceCurrencyState.referenceMultiplier
     ).toFixed(3);
   }
+
+  useEffect(() => {
+    translateY.setValue(75 + listIndex * 75); // Since I'm using a ref for translateY, it needs to be updated when the listIndex changes
+  }, [listIndex]);
 
   function onPress() {
     dispatch(AddToCurrencyList(referenceCurrencyState.referenceName));
@@ -64,7 +76,7 @@ const CurrencyCard = ({
   }
 
   function processLongPress(event: GestureResponderEvent) {
-    onLongPress(event, currencyValue, currencyName);
+    onLongPress(event, currencyValue, currencyName, listIndex);
   }
 
   return (

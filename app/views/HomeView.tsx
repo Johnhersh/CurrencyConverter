@@ -10,7 +10,7 @@ import {
 import { connect, ConnectedProps, useDispatch } from "react-redux";
 
 import { RootState } from "../redux/rootReducer";
-import { UpdateCurrencies } from "../redux/actions";
+import { UpdateCurrencies, SwapInCurrencyList } from "../redux/actions";
 
 import {
   PanGestureHandler,
@@ -26,6 +26,7 @@ import CurrencyHoverCard from "../components/CurrencyHoverCard";
 import ReferenceCurrencyCard from "../components/ReferenceCurrencyCard";
 
 const HomeView = (props: Props) => {
+  const CARD_HEIGHT = 75;
   const dispatch = useDispatch();
   const [bShowHoverCard, showHoverCard] = useState(false);
   const [hoverName, setHoverName] = useState("USD");
@@ -33,6 +34,8 @@ const HomeView = (props: Props) => {
   const bCanPickUp = useRef(false);
   const bHovering = useRef(false);
   const hoverStartLocation = useRef(0);
+  const hoverIndex = useRef(0); // The index of the card we're picking up
+  const indexOffset = useRef(0); // How far away from that card we've dragged so far
   let translateY = new Animated.Value(hoverStartLocation.current);
 
   useEffect(() => {
@@ -51,21 +54,22 @@ const HomeView = (props: Props) => {
     }
   }, [props.referenceCurrencyState.referenceName]);
 
-  let CurrencyCards = props.activeCurrenciesList.currencies.map((currency, index) => {
-    return (
-      <CurrencyCard
-        key={currency}
-        currencyName={currency}
-        listIndex={index}
-        onLongPress={onLongPress}
-        onLongPressRelease={onLongPressRelease}
-        opacity={hoverName == currency ? 0 : 1}
-      />
-    );
-  });
-
+  let currentIndexOffset = 0; // Since handleGesture is called every tick, I declare this variable beforehand for performance
   function handleGesture(event: PanGestureHandlerGestureEvent) {
     translateY.setValue(hoverStartLocation.current + event.nativeEvent.translationY);
+
+    currentIndexOffset = Math.round(event.nativeEvent.translationY / CARD_HEIGHT);
+    if (currentIndexOffset != indexOffset.current) {
+      // If I'm here then user has dragged further than 1 card's distance away from origin
+
+      dispatch(
+        SwapInCurrencyList({
+          from: hoverIndex.current + indexOffset.current,
+          to: hoverIndex.current + currentIndexOffset,
+        })
+      );
+      indexOffset.current = currentIndexOffset;
+    }
   }
 
   function handleGestureStateChange(event: PanGestureHandlerStateChangeEvent) {
@@ -79,11 +83,20 @@ const HomeView = (props: Props) => {
       showHoverCard(false);
       setHoverName(""); // I want to reset the hover name because I hide the picked up card based on this name. Resetting it will unhide the card
       bHovering.current = false;
+      currentIndexOffset = 0;
+      indexOffset.current = 0;
     }
   }
 
-  function onLongPress(event: GestureResponderEvent, currencyValue: string, currencyName: string) {
-    hoverStartLocation.current = event.nativeEvent.pageY - 170; // Note: I'm not sure why this 170 offset is needed
+  function onLongPress(
+    event: GestureResponderEvent,
+    currencyValue: string,
+    currencyName: string,
+    listIndex: number
+  ) {
+    hoverStartLocation.current = event.nativeEvent.pageY - CARD_HEIGHT * 2; // Note: I'm not sure why this 170 offset is needed
+
+    hoverIndex.current = listIndex;
 
     showHoverCard(true);
     setHoverName(currencyName);
@@ -115,7 +128,18 @@ const HomeView = (props: Props) => {
               </Animated.View>
             )}
 
-            {CurrencyCards}
+            {props.activeCurrenciesList.currencies.map((currency, index) => {
+              return (
+                <CurrencyCard
+                  key={currency}
+                  currencyName={currency}
+                  listIndex={index}
+                  onLongPress={onLongPress}
+                  onLongPressRelease={onLongPressRelease}
+                  opacity={hoverName == currency ? 0 : 1}
+                />
+              );
+            })}
           </View>
         </PanGestureHandler>
       </View>

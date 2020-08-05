@@ -23,10 +23,10 @@ export const activeCurrenciesListReducer = (
       return { currencies: newState };
     }
     case "SWAP_IN_CURRENCY_LIST": {
-      let newState = state.currencies;
+      if (action.payload.to >= state.currencies.length || action.payload.to < 0)
+        return { currencies: state.currencies }; // Catch the case when the user drags a card off limits
+      let newState = [...state.currencies];
       let a = newState[action.payload.from];
-      if (action.payload.to >= newState.length || action.payload.to < 0)
-        return { currencies: newState }; // Catch the case when the user drags a card off limits
       newState[action.payload.from] = newState[action.payload.to];
       newState[action.payload.to] = a;
 
