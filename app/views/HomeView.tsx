@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   StyleSheet,
   View,
@@ -13,10 +13,7 @@ import {
 import { connect, ConnectedProps, useDispatch } from "react-redux";
 
 import { RootState } from "../redux/rootReducer";
-import {
-  UpdateCurrencies,
-  //  SwapInCurrencyList
-} from "../redux/actions";
+import { UpdateCurrencies, SwapInCurrencyList } from "../redux/actions";
 
 import {
   LongPressGestureHandler,
@@ -37,11 +34,17 @@ const HomeView = (props: Props) => {
   const [bShowHoverCard, showHoverCard] = useState(false);
   const [hoverName, setHoverName] = useState("USD");
   const [hoverValue, setHoverValue] = useState("0");
-  const bCanPickUp = useRef(false);
-  const bHovering = useRef(false);
+  // const bCanPickUp = useRef(false);
+  // const bHovering = useRef(false);
   const hoverStartLocation = useRef(0);
-  const hoverIndex = useRef(0); // The index of the card we're picking up
-  // const indexOffset = useRef(0); // How far away from that card we've dragged so far
+  /** The index of the card we're picking up */
+  const hoverIndex = useRef(0);
+  /** How far away from that card we've dragged so far */
+  const indexOffset = useRef(0);
+  /** Where on the screen we started dragging from */
+  const initialDragLocation = useRef(0);
+  /**  */
+  const currentIndexOffset = useRef(0);
   let translateY = new Animated.Value(hoverStartLocation.current);
 
   let scrollRef = React.createRef<ScrollView>();
@@ -115,14 +118,14 @@ const HomeView = (props: Props) => {
   //   bCanPickUp.current = true;
   // }
 
-  function onLongPressRelease() {
-    console.log("abandoned");
-    showHoverCard(false);
-    // if (!bHovering.current) {
-    //   showHoverCard(false);
-    //   setHoverName("");
-    // }
-  }
+  // function onLongPressRelease() {
+  //   console.log("abandoned");
+  //   showHoverCard(false);
+  //   // if (!bHovering.current) {
+  //   //   showHoverCard(false);
+  //   //   setHoverName("");
+  //   // }
+  // }
 
   function onCardPressed(
     event: GestureResponderEvent,
@@ -132,17 +135,52 @@ const HomeView = (props: Props) => {
   ) {
     setHoverName(currencyName);
     setHoverValue(currencyValue);
+    hoverIndex.current = listIndex;
   }
 
+  /** For the scrollview's scroll */
   function onScroll({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>) {
-    console.log(`Scrolling: ${nativeEvent.contentOffset.y}`);
+    // console.log(`Scrolling: ${nativeEvent.contentOffset.y}`);
     if (bShowHoverCard) {
-      bHovering.current = true;
-      translateY.setValue(hoverStartLocation.current - nativeEvent.contentOffset.y);
+      // bHovering.current = true;
+      // translateY.setValue(hoverStartLocation.current - nativeEvent.contentOffset.y);
     }
   }
 
-  function onLongPress({ nativeEvent }: LongPressGestureHandlerStateChangeEvent) {
+  // let currentIndexOffset = 0; // Since handleGesture is called every tick, I declare this variable beforehand for performance
+  function onHoverScroll({ nativeEvent }: LongPressGestureHandlerGestureEvent) {
+    if (bShowHoverCard) {
+      // console.log(`Long Panning: ${nativeEvent.absoluteY}`);
+      // bHovering.current = true;
+      translateY.setValue(nativeEvent.absoluteY - CARD_HEIGHT);
+      if (initialDragLocation.current == 0) initialDragLocation.current = nativeEvent.absoluteY;
+
+      currentIndexOffset.current = Math.round(
+        (initialDragLocation.current - nativeEvent.absoluteY) / 75
+      );
+      console.log(
+        `currentIndexOffset: ${currentIndexOffset.current}, indexOffset: ${indexOffset.current}`
+      );
+      if (currentIndexOffset.current != indexOffset.current) {
+        // If I'm here then user has dragged further than 1 card's distance away from origin
+        console.log(
+          `Swapping from: ${hoverIndex.current + indexOffset.current} to ${
+            hoverIndex.current + currentIndexOffset.current
+          }`
+        );
+
+        dispatch(
+          SwapInCurrencyList({
+            from: hoverIndex.current - indexOffset.current,
+            to: hoverIndex.current - currentIndexOffset.current,
+          })
+        );
+        indexOffset.current = currentIndexOffset.current;
+      }
+    }
+  }
+
+  function onLongPressStateChange({ nativeEvent }: LongPressGestureHandlerStateChangeEvent) {
     if (nativeEvent.state == State.ACTIVE) {
       console.log("Long Press");
       showHoverCard(true);
@@ -151,14 +189,8 @@ const HomeView = (props: Props) => {
       console.log("Released");
       showHoverCard(false);
       setHoverName(""); // This resets the opacity on the active card back to 1
-    }
-  }
-
-  function onLongPressEvent({ nativeEvent }: LongPressGestureHandlerGestureEvent) {
-    if (bShowHoverCard) {
-      console.log(`Long Panning: ${nativeEvent.absoluteY}`);
-      bHovering.current = true;
-      translateY.setValue(nativeEvent.absoluteY - CARD_HEIGHT);
+      currentIndexOffset.current = 0;
+      indexOffset.current = 0;
     }
   }
 
@@ -181,8 +213,8 @@ const HomeView = (props: Props) => {
           scrollEnabled={false}
         >
           <LongPressGestureHandler
-            onHandlerStateChange={onLongPress}
-            onGestureEvent={onLongPressEvent}
+            onHandlerStateChange={onLongPressStateChange}
+            onGestureEvent={onHoverScroll}
             ref={longPressRef}
             // simultaneousHandlers={panRef}
             // enabled={!bShowHoverCard}
