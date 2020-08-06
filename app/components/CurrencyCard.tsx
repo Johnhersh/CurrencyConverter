@@ -6,7 +6,6 @@ import {
   Image,
   TouchableOpacity,
   Animated,
-  GestureResponderEvent,
   // LayoutAnimation,
 } from "react-native";
 // import { FontAwesome5 } from "@expo/vector-icons";
@@ -25,12 +24,7 @@ import { currencySymbols, currencyNames, currencyIcons } from "../currencyDefini
 interface PropsBuiltIn {
   currencyName: string;
   listIndex: number;
-  onInitialPress: (
-    event: GestureResponderEvent,
-    currencyValue: string,
-    currencyName: string,
-    listIndex: number
-  ) => void;
+  onInitialPress: (currencyValue: string, currencyName: string, listIndex: number) => void;
   // onLongPressRelease: (event: GestureResponderEvent) => void;
   opacity: number;
   bDisabled: boolean;
@@ -77,9 +71,9 @@ const CurrencyCard = ({
     );
   }
 
-  function onPressIn(event: GestureResponderEvent) {
+  function onPressIn() {
     console.log(`Pressed in`);
-    onInitialPress(event, currencyValue, currencyName, listIndex);
+    onInitialPress(currencyValue, currencyName, listIndex);
   }
 
   // function processLongPress(event: GestureResponderEvent) {

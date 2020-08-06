@@ -5,10 +5,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Animated,
-  GestureResponderEvent,
   ScrollView,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
 } from "react-native";
 import { connect, ConnectedProps, useDispatch } from "react-redux";
 
@@ -34,8 +31,6 @@ const HomeView = (props: Props) => {
   const [bShowHoverCard, showHoverCard] = useState(false);
   const [hoverName, setHoverName] = useState("USD");
   const [hoverValue, setHoverValue] = useState("0");
-  // const bCanPickUp = useRef(false);
-  // const bHovering = useRef(false);
   const hoverStartLocation = useRef(0);
   /** The index of the card we're picking up */
   const hoverIndex = useRef(0);
@@ -66,92 +61,15 @@ const HomeView = (props: Props) => {
     }
   }, [props.referenceCurrencyState.referenceName]);
 
-  // let currentIndexOffset = 0; // Since handleGesture is called every tick, I declare this variable beforehand for performance
-  // function handleGesture(event: PanGestureHandlerGestureEvent) {
-  //   translateY.setValue(hoverStartLocation.current + event.nativeEvent.translationY);
-
-  //   currentIndexOffset = Math.round(event.nativeEvent.translationY / CARD_HEIGHT);
-  //   if (currentIndexOffset != indexOffset.current) {
-  //     // If I'm here then user has dragged further than 1 card's distance away from origin
-
-  //     dispatch(
-  //       SwapInCurrencyList({
-  //         from: hoverIndex.current + indexOffset.current,
-  //         to: hoverIndex.current + currentIndexOffset,
-  //       })
-  //     );
-  //     indexOffset.current = currentIndexOffset;
-  //   }
-  // }
-
-  // function handleGestureStateChange(event: PanGestureHandlerStateChangeEvent) {
-  //   if (event.nativeEvent.state == State.ACTIVE) {
-  //     bHovering.current = true;
-  //     if (bCanPickUp.current) {
-  //       bCanPickUp.current = false;
-  //       translateY.setValue(hoverStartLocation.current);
-  //     }
-  //   } else if (event.nativeEvent.state == State.END) {
-  //     showHoverCard(false);
-  //     setHoverName(""); // I want to reset the hover name because I hide the picked up card based on this name. Resetting it will unhide the card
-  //     bHovering.current = false;
-  //     currentIndexOffset = 0;
-  //     indexOffset.current = 0;
-  //   }
-  // }
-
-  // function onLongPress(
-  //   event: GestureResponderEvent,
-  //   currencyValue: string,
-  //   currencyName: string,
-  //   listIndex: number
-  // ) {
-  //   console.log(`Long Press`);
-  //   hoverStartLocation.current = event.nativeEvent.pageY - CARD_HEIGHT * 2; // Note: I'm not sure why this 170 offset is needed
-
-  //   hoverIndex.current = listIndex;
-
-  //   showHoverCard(true);
-  //   setHoverName(currencyName);
-  //   setHoverValue(currencyValue);
-
-  //   bCanPickUp.current = true;
-  // }
-
-  // function onLongPressRelease() {
-  //   console.log("abandoned");
-  //   showHoverCard(false);
-  //   // if (!bHovering.current) {
-  //   //   showHoverCard(false);
-  //   //   setHoverName("");
-  //   // }
-  // }
-
-  function onCardPressed(
-    event: GestureResponderEvent,
-    currencyValue: string,
-    currencyName: string,
-    listIndex: number
-  ) {
+  function onCardPressed(currencyValue: string, currencyName: string, listIndex: number) {
     setHoverName(currencyName);
     setHoverValue(currencyValue);
     hoverIndex.current = listIndex;
   }
 
-  /** For the scrollview's scroll */
-  function onScroll({ nativeEvent }: NativeSyntheticEvent<NativeScrollEvent>) {
-    // console.log(`Scrolling: ${nativeEvent.contentOffset.y}`);
-    if (bShowHoverCard) {
-      // bHovering.current = true;
-      // translateY.setValue(hoverStartLocation.current - nativeEvent.contentOffset.y);
-    }
-  }
-
   // let currentIndexOffset = 0; // Since handleGesture is called every tick, I declare this variable beforehand for performance
   function onHoverScroll({ nativeEvent }: LongPressGestureHandlerGestureEvent) {
     if (bShowHoverCard) {
-      // console.log(`Long Panning: ${nativeEvent.absoluteY}`);
-      // bHovering.current = true;
       translateY.setValue(nativeEvent.absoluteY - CARD_HEIGHT);
       if (initialDragLocation.current == 0) initialDragLocation.current = nativeEvent.absoluteY;
 
@@ -205,26 +123,16 @@ const HomeView = (props: Props) => {
         )}
         <ScrollView
           contentContainerStyle={styles.scrollContainer}
-          onScroll={onScroll}
           ref={scrollRef}
           scrollEventThrottle={32}
-          // disableScrollViewPanResponder={bShowHoverCard}
-          // canCancelContentTouches={false}
           scrollEnabled={false}
         >
           <LongPressGestureHandler
             onHandlerStateChange={onLongPressStateChange}
             onGestureEvent={onHoverScroll}
             ref={longPressRef}
-            // simultaneousHandlers={panRef}
-            // enabled={!bShowHoverCard}
           >
             <View style={styles.cardsContainer}>
-              {/* {bShowHoverCard && (
-                <Animated.View style={[styles.hoverCardContainer, { top: translateY }]}>
-                  <CurrencyHoverCard currencyName={hoverName} currencyValue={hoverValue} />
-                </Animated.View>
-              )} */}
               <ReferenceCurrencyCard />
               {props.activeCurrenciesList.currencies.map((currency, index) => {
                 return (
@@ -232,7 +140,6 @@ const HomeView = (props: Props) => {
                     key={currency}
                     currencyName={currency}
                     listIndex={index}
-                    // onLongPress={onLongPress}
                     onInitialPress={onCardPressed}
                     opacity={hoverName == currency && bShowHoverCard ? 0 : 1}
                     bDisabled={bShowHoverCard}
