@@ -25,14 +25,15 @@ import { currencySymbols, currencyNames, currencyIcons } from "../currencyDefini
 interface PropsBuiltIn {
   currencyName: string;
   listIndex: number;
-  onLongPress: (
+  onInitialPress: (
     event: GestureResponderEvent,
     currencyValue: string,
     currencyName: string,
     listIndex: number
   ) => void;
-  onLongPressRelease: (event: GestureResponderEvent) => void;
+  // onLongPressRelease: (event: GestureResponderEvent) => void;
   opacity: number;
+  bDisabled: boolean;
 }
 
 const CurrencyCard = ({
@@ -40,9 +41,10 @@ const CurrencyCard = ({
   listIndex,
   currenciesDataState,
   referenceCurrencyState,
-  onLongPress,
-  onLongPressRelease,
+  onInitialPress,
+  // onLongPressRelease,
   opacity,
+  bDisabled,
 }: Props) => {
   const currencySymbol = currencySymbols[currencyName];
   const translateY = useRef(new Animated.Value(75 + listIndex * 75)).current;
@@ -75,19 +77,24 @@ const CurrencyCard = ({
     );
   }
 
-  function processLongPress(event: GestureResponderEvent) {
-    onLongPress(event, currencyValue, currencyName, listIndex);
+  function onPressIn(event: GestureResponderEvent) {
+    console.log(`Pressed in`);
+    onInitialPress(event, currencyValue, currencyName, listIndex);
   }
 
+  // function processLongPress(event: GestureResponderEvent) {
+  //   onLongPress(event, currencyValue, currencyName, listIndex);
+  // }
+
   return (
-    <Animated.View
-      style={[styles.container, { transform: [{ translateY: translateY }] }, { opacity: opacity }]}
-    >
+    <View style={[styles.container, { opacity: opacity }]}>
       <TouchableOpacity
         style={styles.touchable}
         onPress={onPress}
-        onLongPress={processLongPress}
-        onPressOut={onLongPressRelease}
+        onPressIn={onPressIn}
+        // onLongPress={processLongPress}
+        // onPressOut={onLongPressRelease}
+        disabled={bDisabled}
         delayPressOut={100} // This is needed because handleGestureStateChange in HomeView may not happen immediately, so PressOut could override it
       >
         <View style={styles.currencyContainer}>
@@ -101,7 +108,7 @@ const CurrencyCard = ({
           <Text style={{ fontSize: valueFontSize }}>{currencySymbol + " " + currencyValue}</Text>
         </View>
       </TouchableOpacity>
-    </Animated.View>
+    </View>
   );
 };
 
@@ -119,7 +126,6 @@ export default connector(CurrencyCard);
 
 const styles = StyleSheet.create({
   container: {
-    position: "absolute",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
