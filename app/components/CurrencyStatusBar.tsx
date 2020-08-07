@@ -14,7 +14,7 @@ const CurrencyStatusBar = ({ ...props }: StatusBarProps) => (
 
 export default CurrencyStatusBar;
 
-const STATUSBAR_HEIGHT = Platform.OS === "web" ? 0 : 50;
+export const STATUSBAR_HEIGHT = Platform.OS === "web" ? 0 : 50;
 
 const styles = StyleSheet.create({
   container: {

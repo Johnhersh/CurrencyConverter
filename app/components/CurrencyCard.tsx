@@ -36,7 +36,6 @@ const CurrencyCard = ({
   currenciesDataState,
   referenceCurrencyState,
   onInitialPress,
-  // onLongPressRelease,
   opacity,
   bDisabled,
 }: Props) => {
@@ -45,7 +44,7 @@ const CurrencyCard = ({
   const dispatch = useDispatch();
   const valueFontSize = 18 - referenceCurrencyState.referenceMultiplier.toString().length * 0.5; // I want the text to shrink slightly with the amount of digits
 
-  // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+  // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 
   // Doing this because currencyValue will be undefined until the values get propagated into the state:
   let currencyValue = "";

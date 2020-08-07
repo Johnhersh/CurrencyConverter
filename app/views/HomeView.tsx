@@ -6,6 +6,7 @@ import {
   TouchableWithoutFeedback,
   Animated,
   ScrollView,
+  LayoutAnimation,
 } from "react-native";
 import { connect, ConnectedProps, useDispatch } from "react-redux";
 
@@ -20,7 +21,7 @@ import {
 } from "react-native-gesture-handler";
 
 import { getCurrenciesFromApi, getCryptoCurrenciesFromApi } from "../fetchCurrencies";
-import CurrencyStatusBar from "../components/CurrencyStatusBar";
+import CurrencyStatusBar, { STATUSBAR_HEIGHT } from "../components/CurrencyStatusBar";
 import CurrencyCard from "../components/CurrencyCard";
 import CurrencyHoverCard from "../components/CurrencyHoverCard";
 import ReferenceCurrencyCard from "../components/ReferenceCurrencyCard";
@@ -31,8 +32,8 @@ const HomeView = (props: Props) => {
   const [bShowHoverCard, showHoverCard] = useState(false);
   const [hoverName, setHoverName] = useState("USD");
   const [hoverValue, setHoverValue] = useState("0");
+  const hoverCardScale = useRef(new Animated.Value(1));
   const hoverStartLocation = useRef(0);
-  // TODO: Name the offset variables something better. It's confusing even now.
   /** The initial index of the card we picked up */
   const hoverIndex = useRef(0);
   /** Where on the screen we started dragging from */
@@ -41,7 +42,7 @@ const HomeView = (props: Props) => {
   const newIndexSlot = useRef(0);
   /** How many cards away we are from where card was picked up */
   const liveIndexOffset = useRef(0);
-  let translateY = new Animated.Value(hoverStartLocation.current);
+  const translateY = useRef(new Animated.Value(hoverStartLocation.current));
 
   let scrollRef = React.createRef<ScrollView>();
   let longPressRef = React.createRef<LongPressGestureHandler>();
@@ -62,6 +63,15 @@ const HomeView = (props: Props) => {
     }
   }, [props.referenceCurrencyState.referenceName]);
 
+  useEffect(() => {
+    hoverCardScale.current.setValue(1);
+    Animated.timing(hoverCardScale.current, {
+      toValue: 1.03,
+      duration: 100,
+      useNativeDriver: true,
+    }).start();
+  }, [bShowHoverCard]);
+
   function onCardPressed(currencyValue: string, currencyName: string, listIndex: number) {
     setHoverName(currencyName);
     setHoverValue(currencyValue);
@@ -70,7 +80,7 @@ const HomeView = (props: Props) => {
 
   function onHoverScroll({ nativeEvent }: LongPressGestureHandlerGestureEvent) {
     if (bShowHoverCard) {
-      translateY.setValue(nativeEvent.absoluteY - CARD_HEIGHT);
+      translateY.current.setValue(nativeEvent.absoluteY - CARD_HEIGHT - STATUSBAR_HEIGHT / 2);
       if (initialDragLocation.current == 0) initialDragLocation.current = nativeEvent.absoluteY;
 
       liveIndexOffset.current = Math.round(
@@ -79,6 +89,7 @@ const HomeView = (props: Props) => {
 
       if (liveIndexOffset.current != newIndexSlot.current) {
         // If I'm here then user has dragged further than 1 card's distance away from origin
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 
         dispatch(
           SwapInCurrencyList({
@@ -111,7 +122,14 @@ const HomeView = (props: Props) => {
       <View style={styles.container}>
         <CurrencyStatusBar style="dark" />
         {bShowHoverCard && (
-          <Animated.View style={[styles.hoverCardContainer, { top: translateY }]}>
+          <Animated.View
+            style={[
+              styles.hoverCardContainer,
+              {
+                transform: [{ scaleX: hoverCardScale.current }, { translateY: translateY.current }],
+              },
+            ]}
+          >
             <CurrencyHoverCard currencyName={hoverName} currencyValue={hoverValue} />
           </Animated.View>
         )}
@@ -183,7 +201,6 @@ const styles = StyleSheet.create({
   hoverCardContainer: {
     width: "80%",
     alignItems: "center",
-    top: 0,
     zIndex: 100,
     transform: [{ scaleX: 1.03 }],
     shadowRadius: 6,
