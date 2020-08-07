@@ -137,7 +137,7 @@ const HomeView = (props: Props) => {
           contentContainerStyle={styles.scrollContainer}
           ref={scrollRef}
           scrollEventThrottle={32}
-          scrollEnabled={false}
+          scrollEnabled={!bShowHoverCard}
         >
           <LongPressGestureHandler
             onHandlerStateChange={onLongPressStateChange}
