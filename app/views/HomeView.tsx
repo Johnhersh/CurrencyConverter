@@ -102,6 +102,7 @@ const HomeView = (props: Props) => {
       setHoverName(""); // This resets the opacity on the active card back to 1
       liveIndexOffset.current = 0;
       newIndexSlot.current = 0;
+      initialDragLocation.current = 0;
     }
   }
 
