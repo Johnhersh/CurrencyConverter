@@ -1,13 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  Animated,
-  GestureResponderEvent,
-} from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from "react-native";
 // import { FontAwesome5 } from "@expo/vector-icons";
 
 import { connect, ConnectedProps, useDispatch } from "react-redux";
@@ -20,11 +12,12 @@ import {
 
 import { currencySymbols, currencyNames, currencyIcons } from "../currencyDefinitions";
 
+export const CARD_HEIGHT = 70;
+
 export interface InitialPressParams {
   currencyValue: string;
   currencyName: string;
   listIndex: number;
-  pressLocationOffset: number;
 }
 
 /** Props interface */
@@ -74,10 +67,9 @@ const CurrencyCard = ({
     );
   }
 
-  function onPressIn({ nativeEvent }: GestureResponderEvent) {
-    const pressLocationOffset = nativeEvent.locationY;
+  function onPressIn() {
     console.log(`Pressed in`);
-    onInitialPress({ currencyValue, currencyName, listIndex, pressLocationOffset });
+    onInitialPress({ currencyValue, currencyName, listIndex });
   }
 
   // function processLongPress(event: GestureResponderEvent) {
@@ -129,7 +121,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 300,
     width: "95%", // Leaving 5% gap to expand when the user picks up a card
-    maxHeight: 70,
+    maxHeight: CARD_HEIGHT,
     marginVertical: 5,
     borderRadius: 7,
     borderWidth: 1,
@@ -138,6 +130,7 @@ const styles = StyleSheet.create({
   },
   touchable: {
     flex: 1,
+    height: "100%", // Adding this to get full coverage for click detection
     flexDirection: "row",
     alignItems: "center",
   },

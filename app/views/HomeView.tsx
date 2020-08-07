@@ -22,12 +22,11 @@ import {
 
 import { getCurrenciesFromApi, getCryptoCurrenciesFromApi } from "../fetchCurrencies";
 import CurrencyStatusBar, { STATUSBAR_HEIGHT } from "../components/CurrencyStatusBar";
-import CurrencyCard, { InitialPressParams } from "../components/CurrencyCard";
+import CurrencyCard, { InitialPressParams, CARD_HEIGHT } from "../components/CurrencyCard";
 import CurrencyHoverCard from "../components/CurrencyHoverCard";
 import ReferenceCurrencyCard from "../components/ReferenceCurrencyCard";
 
 const HomeView = (props: Props) => {
-  const CARD_HEIGHT = 75;
   const dispatch = useDispatch();
   const [bShowHoverCard, showHoverCard] = useState(false);
   const [hoverName, setHoverName] = useState("USD");
@@ -72,17 +71,10 @@ const HomeView = (props: Props) => {
     }).start();
   }, [bShowHoverCard]);
 
-  function onCardPressed({
-    currencyValue,
-    currencyName,
-    listIndex,
-    pressLocationOffset,
-  }: InitialPressParams) {
+  function onCardPressed({ currencyValue, currencyName, listIndex }: InitialPressParams) {
     setHoverName(currencyName);
     setHoverValue(currencyValue);
     hoverIndex.current = listIndex;
-    translateY.current.setOffset(CARD_HEIGHT / 2 - pressLocationOffset);
-    console.log(pressLocationOffset);
   }
 
   function onHoverScroll({ nativeEvent }: LongPressGestureHandlerGestureEvent) {
@@ -121,6 +113,7 @@ const HomeView = (props: Props) => {
       liveIndexOffset.current = 0;
       newIndexSlot.current = 0;
       initialDragLocation.current = 0;
+      translateY.current.setOffset(0);
     }
   }
 
