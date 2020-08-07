@@ -32,14 +32,15 @@ const HomeView = (props: Props) => {
   const [hoverName, setHoverName] = useState("USD");
   const [hoverValue, setHoverValue] = useState("0");
   const hoverStartLocation = useRef(0);
-  /** The index of the card we're picking up */
+  // TODO: Name the offset variables something better. It's confusing even now.
+  /** The initial index of the card we picked up */
   const hoverIndex = useRef(0);
-  /** How far away from that card we've dragged so far */
-  const indexOffset = useRef(0);
   /** Where on the screen we started dragging from */
   const initialDragLocation = useRef(0);
-  /**  */
-  const currentIndexOffset = useRef(0);
+  /** The new actual new index that will be live when card is dropped */
+  const newIndexSlot = useRef(0);
+  /** How many cards away we are from where card was picked up */
+  const liveIndexOffset = useRef(0);
   let translateY = new Animated.Value(hoverStartLocation.current);
 
   let scrollRef = React.createRef<ScrollView>();
@@ -67,33 +68,25 @@ const HomeView = (props: Props) => {
     hoverIndex.current = listIndex;
   }
 
-  // let currentIndexOffset = 0; // Since handleGesture is called every tick, I declare this variable beforehand for performance
   function onHoverScroll({ nativeEvent }: LongPressGestureHandlerGestureEvent) {
     if (bShowHoverCard) {
       translateY.setValue(nativeEvent.absoluteY - CARD_HEIGHT);
       if (initialDragLocation.current == 0) initialDragLocation.current = nativeEvent.absoluteY;
 
-      currentIndexOffset.current = Math.round(
+      liveIndexOffset.current = Math.round(
         (initialDragLocation.current - nativeEvent.absoluteY) / 75
       );
-      console.log(
-        `currentIndexOffset: ${currentIndexOffset.current}, indexOffset: ${indexOffset.current}`
-      );
-      if (currentIndexOffset.current != indexOffset.current) {
+
+      if (liveIndexOffset.current != newIndexSlot.current) {
         // If I'm here then user has dragged further than 1 card's distance away from origin
-        console.log(
-          `Swapping from: ${hoverIndex.current + indexOffset.current} to ${
-            hoverIndex.current + currentIndexOffset.current
-          }`
-        );
 
         dispatch(
           SwapInCurrencyList({
-            from: hoverIndex.current - indexOffset.current,
-            to: hoverIndex.current - currentIndexOffset.current,
+            from: hoverIndex.current - newIndexSlot.current,
+            to: hoverIndex.current - liveIndexOffset.current,
           })
         );
-        indexOffset.current = currentIndexOffset.current;
+        newIndexSlot.current = liveIndexOffset.current;
       }
     }
   }
@@ -107,8 +100,8 @@ const HomeView = (props: Props) => {
       console.log("Released");
       showHoverCard(false);
       setHoverName(""); // This resets the opacity on the active card back to 1
-      currentIndexOffset.current = 0;
-      indexOffset.current = 0;
+      liveIndexOffset.current = 0;
+      newIndexSlot.current = 0;
     }
   }
 
