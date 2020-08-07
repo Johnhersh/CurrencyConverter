@@ -22,7 +22,7 @@ import {
 
 import { getCurrenciesFromApi, getCryptoCurrenciesFromApi } from "../fetchCurrencies";
 import CurrencyStatusBar, { STATUSBAR_HEIGHT } from "../components/CurrencyStatusBar";
-import CurrencyCard from "../components/CurrencyCard";
+import CurrencyCard, { InitialPressParams } from "../components/CurrencyCard";
 import CurrencyHoverCard from "../components/CurrencyHoverCard";
 import ReferenceCurrencyCard from "../components/ReferenceCurrencyCard";
 
@@ -72,10 +72,17 @@ const HomeView = (props: Props) => {
     }).start();
   }, [bShowHoverCard]);
 
-  function onCardPressed(currencyValue: string, currencyName: string, listIndex: number) {
+  function onCardPressed({
+    currencyValue,
+    currencyName,
+    listIndex,
+    pressLocationOffset,
+  }: InitialPressParams) {
     setHoverName(currencyName);
     setHoverValue(currencyValue);
     hoverIndex.current = listIndex;
+    translateY.current.setOffset(CARD_HEIGHT / 2 - pressLocationOffset);
+    console.log(pressLocationOffset);
   }
 
   function onHoverScroll({ nativeEvent }: LongPressGestureHandlerGestureEvent) {

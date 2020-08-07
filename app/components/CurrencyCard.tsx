@@ -6,7 +6,7 @@ import {
   Image,
   TouchableOpacity,
   Animated,
-  // LayoutAnimation,
+  GestureResponderEvent,
 } from "react-native";
 // import { FontAwesome5 } from "@expo/vector-icons";
 
@@ -20,12 +20,18 @@ import {
 
 import { currencySymbols, currencyNames, currencyIcons } from "../currencyDefinitions";
 
+export interface InitialPressParams {
+  currencyValue: string;
+  currencyName: string;
+  listIndex: number;
+  pressLocationOffset: number;
+}
+
 /** Props interface */
 interface PropsBuiltIn {
   currencyName: string;
   listIndex: number;
-  onInitialPress: (currencyValue: string, currencyName: string, listIndex: number) => void;
-  // onLongPressRelease: (event: GestureResponderEvent) => void;
+  onInitialPress: (params: InitialPressParams) => void;
   opacity: number;
   bDisabled: boolean;
 }
@@ -43,8 +49,6 @@ const CurrencyCard = ({
   const translateY = useRef(new Animated.Value(75 + listIndex * 75)).current;
   const dispatch = useDispatch();
   const valueFontSize = 18 - referenceCurrencyState.referenceMultiplier.toString().length * 0.5; // I want the text to shrink slightly with the amount of digits
-
-  // LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 
   // Doing this because currencyValue will be undefined until the values get propagated into the state:
   let currencyValue = "";
@@ -70,9 +74,10 @@ const CurrencyCard = ({
     );
   }
 
-  function onPressIn() {
+  function onPressIn({ nativeEvent }: GestureResponderEvent) {
+    const pressLocationOffset = nativeEvent.locationY;
     console.log(`Pressed in`);
-    onInitialPress(currencyValue, currencyName, listIndex);
+    onInitialPress({ currencyValue, currencyName, listIndex, pressLocationOffset });
   }
 
   // function processLongPress(event: GestureResponderEvent) {
