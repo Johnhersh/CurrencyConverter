@@ -43,9 +43,6 @@ const HomeView = (props: Props) => {
   const liveIndexOffset = useRef(0);
   const translateY = useRef(new Animated.Value(hoverStartLocation.current));
 
-  let scrollRef = React.createRef<ScrollView>();
-  let longPressRef = React.createRef<LongPressGestureHandler>();
-
   useEffect(() => {
     if (["BTC", "ETH"].includes(props.referenceCurrencyState.referenceName)) {
       getCryptoCurrenciesFromApi(
@@ -149,7 +146,6 @@ const HomeView = (props: Props) => {
         )}
         <ScrollView
           contentContainerStyle={styles.scrollContentContainer}
-          ref={scrollRef}
           style={styles.scrollContainer}
           scrollEventThrottle={32}
           scrollEnabled={!bShowHoverCard}
@@ -157,7 +153,6 @@ const HomeView = (props: Props) => {
           <LongPressGestureHandler
             onHandlerStateChange={onLongPressStateChange}
             onGestureEvent={onHoverScroll}
-            ref={longPressRef}
           >
             <View style={styles.cardsContainer}>
               <ReferenceCurrencyCard />
