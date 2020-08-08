@@ -98,20 +98,21 @@ const HomeView = (props: Props) => {
         // If I'm here then user has dragged further than 1 card's distance away from origin
         const from = hoverIndex.current - newIndexSlot.current;
         const to = hoverIndex.current - liveIndexOffset.current;
+        const fromIsWithinRange = from >= 0 && from < props.activeCurrenciesList.currencies.length;
+        const toIsWithinRange = to >= 0 && to < props.activeCurrenciesList.currencies.length;
 
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
 
-        if (from >= 0 && from < props.activeCurrenciesList.currencies.length)
-          if (to >= 0 && to < props.activeCurrenciesList.currencies.length) {
-            dispatch(
-              SwapInCurrencyList({
-                from: from,
-                to: to,
-              })
-            );
+        if (fromIsWithinRange && toIsWithinRange) {
+          dispatch(
+            SwapInCurrencyList({
+              from: from,
+              to: to,
+            })
+          );
 
-            newIndexSlot.current = liveIndexOffset.current;
-          }
+          newIndexSlot.current = liveIndexOffset.current;
+        }
       }
     }
   }
