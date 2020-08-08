@@ -148,8 +148,9 @@ const HomeView = (props: Props) => {
           </Animated.View>
         )}
         <ScrollView
-          contentContainerStyle={styles.scrollContainer}
+          contentContainerStyle={styles.scrollContentContainer}
           ref={scrollRef}
+          style={styles.scrollContainer}
           scrollEventThrottle={32}
           scrollEnabled={!bShowHoverCard}
         >
@@ -200,10 +201,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     overflow: "visible",
   },
-  scrollContainer: {
+  scrollContentContainer: {
     flex: 1,
     width: "80%",
     alignItems: "center",
+    alignSelf: "center",
+  },
+  scrollContainer: {
+    flex: 1,
+    width: "100%", // This is for the react-native-web div
   },
   cardsContainer: {
     display: "flex",
