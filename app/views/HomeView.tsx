@@ -79,12 +79,16 @@ const HomeView = (props: Props) => {
 
   function onHoverScroll({ nativeEvent }: LongPressGestureHandlerGestureEvent) {
     if (bShowHoverCard) {
+      if (initialDragLocation.current == 0) {
+        initialDragLocation.current = nativeEvent.absoluteY;
+        translateY.current.setValue(nativeEvent.absoluteY - CARD_HEIGHT - STATUSBAR_HEIGHT / 2);
+      }
+
       Animated.timing(translateY.current, {
         toValue: nativeEvent.absoluteY - CARD_HEIGHT - STATUSBAR_HEIGHT / 2,
         duration: 0,
         useNativeDriver: true,
       }).start();
-      if (initialDragLocation.current == 0) initialDragLocation.current = nativeEvent.absoluteY;
 
       liveIndexOffset.current = Math.round(
         (initialDragLocation.current - nativeEvent.absoluteY) / 75
