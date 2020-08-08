@@ -81,7 +81,7 @@ const HomeView = (props: Props) => {
     if (bShowHoverCard) {
       if (initialDragLocation.current == 0) {
         initialDragLocation.current = nativeEvent.absoluteY;
-        translateY.current.setValue(nativeEvent.absoluteY - CARD_HEIGHT - STATUSBAR_HEIGHT / 2);
+        translateY.current.setValue(nativeEvent.absoluteY - CARD_HEIGHT - STATUSBAR_HEIGHT / 2); // Gotta set initial location, otherwise the Animated.timing below will cause card to appear to snap into place
       }
 
       Animated.timing(translateY.current, {
