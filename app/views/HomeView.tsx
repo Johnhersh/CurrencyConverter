@@ -101,9 +101,9 @@ const HomeView = (props: Props) => {
         const fromIsWithinRange = from >= 0 && from < props.activeCurrenciesList.currencies.length;
         const toIsWithinRange = to >= 0 && to < props.activeCurrenciesList.currencies.length;
 
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-
         if (fromIsWithinRange && toIsWithinRange) {
+          LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+
           dispatch(
             SwapInCurrencyList({
               from: from,
