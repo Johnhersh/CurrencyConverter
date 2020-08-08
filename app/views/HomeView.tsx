@@ -103,11 +103,9 @@ const HomeView = (props: Props) => {
 
   function onLongPressStateChange({ nativeEvent }: LongPressGestureHandlerStateChangeEvent) {
     if (nativeEvent.state == State.ACTIVE) {
-      console.log("Long Press");
       showHoverCard(true);
     }
     if (nativeEvent.state == State.END) {
-      console.log("Released");
       showHoverCard(false);
       setHoverName(""); // This resets the opacity on the active card back to 1
       liveIndexOffset.current = 0;

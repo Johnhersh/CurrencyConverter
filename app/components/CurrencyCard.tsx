@@ -68,13 +68,8 @@ const CurrencyCard = ({
   }
 
   function onPressIn() {
-    console.log(`Pressed in`);
     onInitialPress({ currencyValue, currencyName, listIndex });
   }
-
-  // function processLongPress(event: GestureResponderEvent) {
-  //   onLongPress(event, currencyValue, currencyName, listIndex);
-  // }
 
   return (
     <View style={[styles.container, { opacity: opacity }]}>
