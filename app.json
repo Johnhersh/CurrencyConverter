@@ -21,6 +21,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "Currency converter using multiple APIs",
+    "githubUrl": "https://github.com/Johnhersh/CurrencyConverter"
   }
 }
