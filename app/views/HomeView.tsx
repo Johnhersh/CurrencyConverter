@@ -119,7 +119,7 @@ const HomeView = (props: Props) => {
 
   function onLongPressStateChange({ nativeEvent }: LongPressGestureHandlerStateChangeEvent) {
     if (nativeEvent.state == State.ACTIVE) {
-      showHoverCard(true);
+      if (hoverName != "") showHoverCard(true);
     }
     if (nativeEvent.state == State.END) {
       showHoverCard(false);
