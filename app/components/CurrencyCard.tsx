@@ -1,6 +1,13 @@
 import React, { useEffect, useRef } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity, Animated } from "react-native";
-// import { FontAwesome5 } from "@expo/vector-icons";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Animated,
+  LayoutAnimation,
+} from "react-native";
 
 import { connect, ConnectedProps, useDispatch } from "react-redux";
 import { RootState } from "../redux/rootReducer";
@@ -56,6 +63,7 @@ const CurrencyCard = ({
   }, [listIndex]);
 
   function onPress() {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     dispatch(AddToCurrencyList(referenceCurrencyState.referenceName));
     dispatch(RemoveFromCurrencyList(currencyName));
     dispatch(
