@@ -63,7 +63,6 @@ const CurrencyCard = ({
 
   useEffect(() => {
     if (cardDropIndex >= 0 && cardDropIndex != listIndex) {
-      console.log(`Waving ${currencyName}`);
       const waveIndex = Math.abs(listIndex - cardDropIndex);
       scaleAnim.setValue(1);
 
@@ -113,8 +112,6 @@ const CurrencyCard = ({
         style={styles.touchable}
         onPress={onPress}
         onPressIn={onPressIn}
-        // onLongPress={processLongPress}
-        // onPressOut={onLongPressRelease}
         disabled={bDisabled}
         delayPressOut={100} // This is needed because handleGestureStateChange in HomeView may not happen immediately, so PressOut could override it
       >
