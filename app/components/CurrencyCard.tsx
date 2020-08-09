@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -51,7 +51,7 @@ const CurrencyCard = ({
   const currencySymbol = currencySymbols[currencyName];
   const dispatch = useDispatch();
   const valueFontSize = 18 - referenceCurrencyState.referenceMultiplier.toString().length * 0.5; // I want the text to shrink slightly with the amount of digits
-  let scaleAnim = new Animated.Value(1);
+  const scaleAnim = useRef(new Animated.Value(1)); // Had to make this into a ref, otherwise the animated value gets reset during a state update and the wave suddenly stops
 
   // Doing this because currencyValue will be undefined until the values get propagated into the state:
   let currencyValue = "";
@@ -64,17 +64,17 @@ const CurrencyCard = ({
   useEffect(() => {
     if (cardDropIndex >= 0 && cardDropIndex != listIndex) {
       const waveIndex = Math.abs(listIndex - cardDropIndex);
-      scaleAnim.setValue(1);
+      scaleAnim.current.setValue(1);
 
       Animated.sequence([
         Animated.delay(100 * waveIndex * 0.7),
-        Animated.timing(scaleAnim, {
+        Animated.timing(scaleAnim.current, {
           toValue: 1.1,
           duration: 200,
           easing: Easing.inOut(Easing.ease),
           useNativeDriver: true,
         }),
-        Animated.spring(scaleAnim, {
+        Animated.spring(scaleAnim.current, {
           toValue: 1,
           mass: 1 + waveIndex * 0.3,
           useNativeDriver: true,
@@ -105,7 +105,7 @@ const CurrencyCard = ({
       style={[
         styles.container,
         { opacity: opacity },
-        { transform: [{ scaleX: scaleAnim }, { scaleY: scaleAnim }] },
+        { transform: [{ scaleX: scaleAnim.current }, { scaleY: scaleAnim.current }] },
       ]}
     >
       <TouchableOpacity
