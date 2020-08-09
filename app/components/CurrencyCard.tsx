@@ -84,7 +84,6 @@ const CurrencyCard = ({
   }, [cardDropIndex]);
 
   function onPress() {
-    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     dispatch(AddToCurrencyList(referenceCurrencyState.referenceName));
     dispatch(RemoveFromCurrencyList(currencyName));
     dispatch(
