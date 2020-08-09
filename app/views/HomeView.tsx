@@ -31,14 +31,16 @@ const HomeView = (props: Props) => {
   const [bShowHoverCard, showHoverCard] = useState(false);
   const [hoverName, setHoverName] = useState("USD");
   const [hoverValue, setHoverValue] = useState("0");
+  /** The index of the card that was dropped. Used for wave animation in the card */
+  const [cardDropIndex, setCardDropIndex] = useState(-1); // -1 is used to mark the initial state so no animation happens
   const hoverCardScale = useRef(new Animated.Value(1));
   const hoverStartLocation = useRef(0);
   /** The initial index of the card we picked up */
   const hoverIndex = useRef(0);
   /** Where on the screen we started dragging from */
   const initialDragLocation = useRef(0);
-  /** The new actual new index that will be live when card is dropped */
-  const newIndexSlot = useRef(0);
+  /** Temporary index used to compare offsets */
+  const tempIndexSlot = useRef(0);
   /** How many cards away we are from where card was picked up */
   const liveIndexOffset = useRef(0);
   const translateY = useRef(new Animated.Value(hoverStartLocation.current));
@@ -91,9 +93,9 @@ const HomeView = (props: Props) => {
         (initialDragLocation.current - nativeEvent.absoluteY) / 75
       );
 
-      if (liveIndexOffset.current != newIndexSlot.current) {
+      if (liveIndexOffset.current != tempIndexSlot.current) {
         // If I'm here then user has dragged further than 1 card's distance away from origin
-        const from = hoverIndex.current - newIndexSlot.current;
+        const from = hoverIndex.current - tempIndexSlot.current;
         const to = hoverIndex.current - liveIndexOffset.current;
         const fromIsWithinRange = from >= 0 && from < props.activeCurrenciesList.currencies.length;
         const toIsWithinRange = to >= 0 && to < props.activeCurrenciesList.currencies.length;
@@ -108,7 +110,7 @@ const HomeView = (props: Props) => {
             })
           );
 
-          newIndexSlot.current = liveIndexOffset.current;
+          tempIndexSlot.current = liveIndexOffset.current;
         }
       }
     }
@@ -121,8 +123,9 @@ const HomeView = (props: Props) => {
     if (nativeEvent.state == State.END) {
       showHoverCard(false);
       setHoverName(""); // This resets the opacity on the active card back to 1
+      setCardDropIndex(hoverIndex.current - liveIndexOffset.current);
       liveIndexOffset.current = 0;
-      newIndexSlot.current = 0;
+      tempIndexSlot.current = 0;
       initialDragLocation.current = 0;
       translateY.current.setOffset(0);
     }
@@ -165,6 +168,7 @@ const HomeView = (props: Props) => {
                     onInitialPress={onCardPressed}
                     opacity={hoverName == currency && bShowHoverCard ? 0 : 1}
                     bDisabled={bShowHoverCard}
+                    cardDropIndex={cardDropIndex}
                   />
                 );
               })}

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Animated,
   LayoutAnimation,
+  Easing,
 } from "react-native";
 
 import { connect, ConnectedProps, useDispatch } from "react-redux";
@@ -34,6 +35,7 @@ interface PropsBuiltIn {
   onInitialPress: (params: InitialPressParams) => void;
   opacity: number;
   bDisabled: boolean;
+  cardDropIndex: number;
 }
 
 const CurrencyCard = ({
@@ -44,11 +46,12 @@ const CurrencyCard = ({
   onInitialPress,
   opacity,
   bDisabled,
+  cardDropIndex,
 }: Props) => {
   const currencySymbol = currencySymbols[currencyName];
-  const translateY = useRef(new Animated.Value(75 + listIndex * 75)).current;
   const dispatch = useDispatch();
   const valueFontSize = 18 - referenceCurrencyState.referenceMultiplier.toString().length * 0.5; // I want the text to shrink slightly with the amount of digits
+  let scaleAnim = new Animated.Value(1);
 
   // Doing this because currencyValue will be undefined until the values get propagated into the state:
   let currencyValue = "";
@@ -59,8 +62,27 @@ const CurrencyCard = ({
   }
 
   useEffect(() => {
-    translateY.setValue(75 + listIndex * 75); // Since I'm using a ref for translateY, it needs to be updated when the listIndex changes
-  }, [listIndex]);
+    if (cardDropIndex >= 0 && cardDropIndex != listIndex) {
+      console.log(`Waving ${currencyName}`);
+      const waveIndex = Math.abs(listIndex - cardDropIndex);
+      scaleAnim.setValue(1);
+
+      Animated.sequence([
+        Animated.delay(100 * waveIndex * 0.7),
+        Animated.timing(scaleAnim, {
+          toValue: 1.1,
+          duration: 200,
+          easing: Easing.inOut(Easing.ease),
+          useNativeDriver: true,
+        }),
+        Animated.spring(scaleAnim, {
+          toValue: 1,
+          mass: 1 + waveIndex * 0.3,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
+  }, [cardDropIndex]);
 
   function onPress() {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -80,7 +102,13 @@ const CurrencyCard = ({
   }
 
   return (
-    <View style={[styles.container, { opacity: opacity }]}>
+    <Animated.View
+      style={[
+        styles.container,
+        { opacity: opacity },
+        { transform: [{ scaleX: scaleAnim }, { scaleY: scaleAnim }] },
+      ]}
+    >
       <TouchableOpacity
         style={styles.touchable}
         onPress={onPress}
@@ -101,7 +129,7 @@ const CurrencyCard = ({
           <Text style={{ fontSize: valueFontSize }}>{currencySymbol + " " + currencyValue}</Text>
         </View>
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 };
 
