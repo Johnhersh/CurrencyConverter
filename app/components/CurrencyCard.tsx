@@ -1,14 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  Animated,
-  LayoutAnimation,
-  Easing,
-} from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity, Animated, Easing } from "react-native";
 
 import { connect, ConnectedProps, useDispatch } from "react-redux";
 import { RootState } from "../redux/rootReducer";
@@ -147,7 +138,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: 300,
-    width: "95%", // Leaving 5% gap to expand when the user picks up a card
+    width: "80%",
     maxHeight: CARD_HEIGHT,
     marginVertical: 5,
     borderRadius: 7,

@@ -1,8 +1,9 @@
 import React, { useRef } from "react";
-import { TextInput, StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
+import { View, TextInput, StyleSheet, Text, TouchableWithoutFeedback } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { connect, ConnectedProps, useStore } from "react-redux";
 import { RootState } from "../redux/rootReducer";
+import { CARD_HEIGHT } from "./CurrencyCard";
 
 const ReferenceCurrencyCard = ({ referenceCurrencyState }: Props) => {
   const textInput = useRef<TextInput>(null);
@@ -26,28 +27,30 @@ const ReferenceCurrencyCard = ({ referenceCurrencyState }: Props) => {
   }
 
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        textInput.current?.focus();
-      }}
-    >
-      <LinearGradient
-        style={styles.container}
-        colors={["#4E91FF", "#00B4FF"]}
-        start={[0.5, 1]}
-        end={[0.5, 0]}
+    <View style={styles.container}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          textInput.current?.focus();
+        }}
       >
-        <Text>{referenceCurrencyState.referenceCurrencySymbol + " "}</Text>
-        <TextInput
-          value={textValue}
-          ref={textInput}
-          style={styles.textInputStyle}
-          keyboardType={"numeric"}
-          onChangeText={(text) => onChangeText(text)}
-        />
-        <Text>{" " + referenceCurrencyState.referenceName}</Text>
-      </LinearGradient>
-    </TouchableWithoutFeedback>
+        <LinearGradient
+          style={styles.gradientContainer}
+          colors={["#4E91FF", "#00B4FF"]}
+          start={[0.5, 1]}
+          end={[0.5, 0]}
+        >
+          <Text>{referenceCurrencyState.referenceCurrencySymbol + " "}</Text>
+          <TextInput
+            value={textValue}
+            ref={textInput}
+            style={styles.textInputStyle}
+            keyboardType={"numeric"}
+            onChangeText={(text) => onChangeText(text)}
+          />
+          <Text>{" " + referenceCurrencyState.referenceName}</Text>
+        </LinearGradient>
+      </TouchableWithoutFeedback>
+    </View>
   );
 };
 
@@ -65,19 +68,27 @@ export default connector(ReferenceCurrencyCard);
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    display: "flex",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    maxHeight: 70,
-    marginHorizontal: 2,
+    height: 300,
+    width: "80%",
+    maxHeight: CARD_HEIGHT,
     marginVertical: 5,
     borderRadius: 7,
     borderWidth: 1,
-    borderColor: "#4E91FF",
-    backgroundColor: "lightblue",
-    width: "95%",
+    borderColor: "#adadad",
+    backgroundColor: "white",
+    display: "flex",
+    marginHorizontal: 2,
+    overflow: "hidden",
+  },
+  gradientContainer: {
+    flex: 1,
+    height: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   textInputStyle: {
     flex: -1,

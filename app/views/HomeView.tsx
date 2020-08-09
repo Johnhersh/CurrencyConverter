@@ -7,7 +7,6 @@ import {
   Animated,
   ScrollView,
   LayoutAnimation,
-  Dimensions,
 } from "react-native";
 import { connect, ConnectedProps, useDispatch } from "react-redux";
 
@@ -23,7 +22,7 @@ import {
 
 import { getCurrenciesFromApi, getCryptoCurrenciesFromApi } from "../fetchCurrencies";
 import CurrencyStatusBar, { STATUSBAR_HEIGHT } from "../components/CurrencyStatusBar";
-import CurrencyCard, { InitialPressParams, CARD_HEIGHT } from "../components/CurrencyCard";
+import CurrencyCard, { InitialPressParams } from "../components/CurrencyCard";
 import CurrencyHoverCard from "../components/CurrencyHoverCard";
 import ReferenceCurrencyCard from "../components/ReferenceCurrencyCard";
 
@@ -206,10 +205,8 @@ const styles = StyleSheet.create({
     width: "100%", // This is for the react-native-web div
   },
   cardsContainer: {
-    height: Dimensions.get("window").height,
-    display: "flex",
     flex: 1,
-    width: "80%",
+    display: "flex",
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
