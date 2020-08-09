@@ -11,14 +11,19 @@ interface PropsBuiltIn {
   currencyName: string;
 }
 
-const AddRemoveCurrencyCard = ({ currencyName = "USD", activeCurrenciesList }: Props) => {
+const AddRemoveCurrencyCard = ({
+  currencyName = "USD",
+  activeCurrenciesList,
+  referenceCurrencyState,
+}: Props) => {
   const bIsActive = activeCurrenciesList.currencies.includes(currencyName);
+  const bIsReferenceCurrency = referenceCurrencyState.referenceName == currencyName;
   const dispatch = useDispatch();
 
   function onPress() {
     if (bIsActive) {
       dispatch(RemoveFromCurrencyList(currencyName));
-    } else {
+    } else if (!bIsReferenceCurrency) {
       dispatch(AddToCurrencyList(currencyName));
     }
   }
