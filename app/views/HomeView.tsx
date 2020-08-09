@@ -7,6 +7,7 @@ import {
   Animated,
   ScrollView,
   LayoutAnimation,
+  Dimensions,
 } from "react-native";
 import { connect, ConnectedProps, useDispatch } from "react-redux";
 
@@ -80,11 +81,11 @@ const HomeView = (props: Props) => {
     if (bShowHoverCard) {
       if (initialDragLocation.current == 0) {
         initialDragLocation.current = nativeEvent.absoluteY;
-        translateY.current.setValue(nativeEvent.absoluteY - CARD_HEIGHT - STATUSBAR_HEIGHT / 2); // Gotta set initial location, otherwise the Animated.timing below will cause card to appear to snap into place
+        translateY.current.setValue(nativeEvent.absoluteY - STATUSBAR_HEIGHT / 2); // Gotta set initial location, otherwise the Animated.timing below will cause card to appear to snap into place
       }
 
       Animated.timing(translateY.current, {
-        toValue: nativeEvent.absoluteY - CARD_HEIGHT - STATUSBAR_HEIGHT / 2,
+        toValue: nativeEvent.absoluteY - STATUSBAR_HEIGHT / 2,
         duration: 0,
         useNativeDriver: true,
       }).start();
@@ -133,7 +134,7 @@ const HomeView = (props: Props) => {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{ flex: 1 }}>
       <View style={styles.container}>
         <CurrencyStatusBar style="dark" />
         {bShowHoverCard && (
@@ -149,7 +150,6 @@ const HomeView = (props: Props) => {
           </Animated.View>
         )}
         <ScrollView
-          contentContainerStyle={styles.scrollContentContainer}
           style={styles.scrollContainer}
           scrollEventThrottle={32}
           scrollEnabled={!bShowHoverCard}
@@ -201,24 +201,21 @@ const styles = StyleSheet.create({
     alignItems: "center",
     overflow: "visible",
   },
-  scrollContentContainer: {
-    flex: 1,
-    width: "80%",
-    alignItems: "center",
-    alignSelf: "center",
-  },
   scrollContainer: {
     flex: 1,
     width: "100%", // This is for the react-native-web div
   },
   cardsContainer: {
+    height: Dimensions.get("window").height,
     display: "flex",
-    width: "100%",
-    height: "100%",
+    flex: 1,
+    width: "80%",
     alignItems: "center",
     justifyContent: "center",
+    alignSelf: "center",
   },
   hoverCardContainer: {
+    position: "absolute",
     width: "80%",
     alignItems: "center",
     zIndex: 100,
