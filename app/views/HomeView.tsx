@@ -119,6 +119,7 @@ const HomeView = (props: Props) => {
   function onLongPressStateChange({ nativeEvent }: LongPressGestureHandlerStateChangeEvent) {
     if (nativeEvent.state == State.ACTIVE) {
       if (hoverName != "") showHoverCard(true);
+      setCardDropIndex(-1); // Reset the wave animation. If this is not here, then dropping a card on the same slot as before won't play the wave anim
     }
     if (nativeEvent.state == State.END) {
       showHoverCard(false);
