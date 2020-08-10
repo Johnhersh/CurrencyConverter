@@ -7,7 +7,14 @@ import {
   Animated,
   ScrollView,
   LayoutAnimation,
+  Platform,
+  UIManager,
 } from "react-native";
+if (Platform.OS === "android") {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
 import { connect, ConnectedProps, useDispatch } from "react-redux";
 
 import { RootState } from "../redux/rootReducer";
@@ -28,7 +35,7 @@ import ReferenceCurrencyCard from "../components/ReferenceCurrencyCard";
 
 const HomeView = (props: Props) => {
   const dispatch = useDispatch();
-  const [bShowHoverCard, showHoverCard] = useState(false);
+  const bShowHoverCard = useRef(false);
   const [hoverName, setHoverName] = useState("USD");
   const [hoverValue, setHoverValue] = useState("0");
   /** The index of the card that was dropped. Used for wave animation in the card */
@@ -64,11 +71,11 @@ const HomeView = (props: Props) => {
   useEffect(() => {
     hoverCardScale.current.setValue(1);
     Animated.timing(hoverCardScale.current, {
-      toValue: 1.03,
+      toValue: 1.1,
       duration: 100,
       useNativeDriver: true,
     }).start();
-  }, [bShowHoverCard]);
+  }, [bShowHoverCard.current]);
 
   function onCardPressed({ currencyValue, currencyName, listIndex }: InitialPressParams) {
     setHoverName(currencyName);
@@ -77,7 +84,7 @@ const HomeView = (props: Props) => {
   }
 
   function onHoverScroll({ nativeEvent }: LongPressGestureHandlerGestureEvent) {
-    if (bShowHoverCard) {
+    if (bShowHoverCard.current) {
       if (initialDragLocation.current == 0) {
         initialDragLocation.current = nativeEvent.absoluteY;
         translateY.current.setValue(nativeEvent.absoluteY - STATUSBAR_HEIGHT / 2); // Gotta set initial location, otherwise the Animated.timing below will cause card to appear to snap into place
@@ -118,11 +125,11 @@ const HomeView = (props: Props) => {
 
   function onLongPressStateChange({ nativeEvent }: LongPressGestureHandlerStateChangeEvent) {
     if (nativeEvent.state == State.ACTIVE) {
-      if (hoverName != "") showHoverCard(true);
+      if (hoverName != "") bShowHoverCard.current = true;
       setCardDropIndex(-1); // Reset the wave animation. If this is not here, then dropping a card on the same slot as before won't play the wave anim
     }
     if (nativeEvent.state == State.END) {
-      showHoverCard(false);
+      bShowHoverCard.current = false;
       setHoverName(""); // This resets the opacity on the active card back to 1
       setCardDropIndex(hoverIndex.current - liveIndexOffset.current);
       liveIndexOffset.current = 0;
@@ -136,7 +143,7 @@ const HomeView = (props: Props) => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{ flex: 1 }}>
       <View style={styles.container}>
         <CurrencyStatusBar style="dark" />
-        {bShowHoverCard && (
+        {bShowHoverCard.current && (
           <Animated.View
             style={[
               styles.hoverCardContainer,
@@ -151,13 +158,15 @@ const HomeView = (props: Props) => {
         <ScrollView
           style={styles.scrollContainer}
           scrollEventThrottle={32}
-          scrollEnabled={!bShowHoverCard}
+          scrollEnabled={!bShowHoverCard.current}
         >
           <LongPressGestureHandler
+            minDurationMs={300}
+            maxDist={500}
             onHandlerStateChange={onLongPressStateChange}
             onGestureEvent={onHoverScroll}
           >
-            <View style={styles.cardsContainer}>
+            <Animated.View style={styles.cardsContainer}>
               <ReferenceCurrencyCard />
               {props.activeCurrenciesList.currencies.map((currency, index) => {
                 return (
@@ -166,13 +175,13 @@ const HomeView = (props: Props) => {
                     currencyName={currency}
                     listIndex={index}
                     onInitialPress={onCardPressed}
-                    opacity={hoverName == currency && bShowHoverCard ? 0 : 1}
-                    bDisabled={bShowHoverCard}
+                    opacity={hoverName == currency && bShowHoverCard.current ? 0 : 1}
+                    bDisabled={bShowHoverCard.current}
                     cardDropIndex={cardDropIndex}
                   />
                 );
               })}
-            </View>
+            </Animated.View>
           </LongPressGestureHandler>
         </ScrollView>
       </View>
