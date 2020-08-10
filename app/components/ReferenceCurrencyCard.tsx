@@ -10,7 +10,9 @@ const ReferenceCurrencyCard = ({ referenceCurrencyState }: Props) => {
   const store = useStore();
 
   // Doing this because sometimes the value can be blank, represented by "0"
-  let textValue = referenceCurrencyState.referenceMultiplier.toString();
+  let textValue = "";
+  if (!isNaN(referenceCurrencyState.referenceMultiplier))
+    textValue = referenceCurrencyState.referenceMultiplier.toString();
   if (textValue === "0") textValue = "";
 
   function onChangeText(newText: string) {
