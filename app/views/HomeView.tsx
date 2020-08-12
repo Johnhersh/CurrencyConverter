@@ -5,6 +5,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Animated,
+  Easing,
   ScrollView,
   LayoutAnimation,
   Platform,
@@ -29,7 +30,7 @@ import {
 
 import { getCurrenciesFromApi, getCryptoCurrenciesFromApi } from "../fetchCurrencies";
 import CurrencyStatusBar, { STATUSBAR_HEIGHT } from "../components/CurrencyStatusBar";
-import CurrencyCard, { InitialPressParams } from "../components/CurrencyCard";
+import CurrencyCard, { InitialPressParams, CARD_HEIGHT } from "../components/CurrencyCard";
 import CurrencyHoverCard from "../components/CurrencyHoverCard";
 import ReferenceCurrencyCard from "../components/ReferenceCurrencyCard";
 
@@ -40,7 +41,7 @@ const HomeView = (props: Props) => {
   const [hoverValue, setHoverValue] = useState("0");
   /** The index of the card that was dropped. Used for wave animation in the card */
   const [cardDropIndex, setCardDropIndex] = useState(-1); // -1 is used to mark the initial state so no animation happens
-  const hoverCardScale = useRef(new Animated.Value(1));
+  const hoverCardScale = useRef(new Animated.Value(1.1));
   const hoverStartLocation = useRef(0);
   /** The initial index of the card we picked up */
   const hoverIndex = useRef(0);
@@ -51,6 +52,7 @@ const HomeView = (props: Props) => {
   /** How many cards away we are from where card was picked up */
   const liveIndexOffset = useRef(0);
   const translateY = useRef(new Animated.Value(hoverStartLocation.current));
+  translateY.current.setOffset(-1 * CARD_HEIGHT * 0.85); // Since we scale it up by 10%, gotta offset it by 10% to match
 
   useEffect(() => {
     if (["BTC", "ETH"].includes(props.referenceCurrencyState.referenceName)) {
@@ -67,15 +69,6 @@ const HomeView = (props: Props) => {
       });
     }
   }, [props.referenceCurrencyState.referenceName]);
-
-  useEffect(() => {
-    hoverCardScale.current.setValue(1);
-    Animated.timing(hoverCardScale.current, {
-      toValue: 1.1,
-      duration: 100,
-      useNativeDriver: true,
-    }).start();
-  }, [bShowHoverCard.current]);
 
   function onCardPressed({ currencyValue, currencyName, listIndex }: InitialPressParams) {
     setHoverName(currencyName);
@@ -148,7 +141,10 @@ const HomeView = (props: Props) => {
             style={[
               styles.hoverCardContainer,
               {
-                transform: [{ scaleX: hoverCardScale.current }, { translateY: translateY.current }],
+                transform: [
+                  { scaleX: hoverCardScale.current, scaleY: hoverCardScale.current },
+                  { translateY: translateY.current },
+                ],
               },
             ]}
           >

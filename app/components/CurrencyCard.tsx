@@ -164,7 +164,6 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 7,
-    backgroundColor: "blue",
   },
   currencyLongNameContainer: {
     flex: 1,
@@ -174,9 +173,6 @@ const styles = StyleSheet.create({
   valuesContainer: {
     flex: 1,
     alignItems: "flex-end",
-    paddingRight: 10,
-  },
-  gripContainer: {
     paddingRight: 10,
   },
 });
